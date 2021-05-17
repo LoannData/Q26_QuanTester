@@ -3,7 +3,10 @@
 import sys, os 
 import importlib
 
-class SIMULATION : 
+from quanTest.analysis import ANALYSIS  
+from quanTest.writer import WRITER 
+
+class SIMULATION(ANALYSIS, WRITER) : 
 
     def __init__(self, PORTFOLIO, PRICE_TABLE) : 
         # MAIN PARAMETERS 
@@ -24,7 +27,14 @@ class SIMULATION :
         # RUNTIME EVOLVING PARAMETERS 
         self.emulatedPriceTable = None 
 
+        # LOG PARAMETERS 
+        self.logEvery = 100 
+
         return 
+
+    ###############################################################
+    # BACKTEST OPERATIONS
+    ###############################################################
 
     def importStrategy(self) : 
 
@@ -64,15 +74,11 @@ class SIMULATION :
             # 3. We enter in the sub loop where strategies are executed 
             self.subLoop() 
 
-
+            self.simulationState(i, iMax) 
             #print ("i = ",i,"/",iMax)
             # We increment the simulation 
             i += 1
     
-
-    ###############################################################
-    # 
-    ###############################################################
     def updatePrices(self, index) : 
         """ 
         Function that define the SYMBOL prices in the portfolio as a function of the given index 
@@ -155,6 +161,13 @@ class SIMULATION :
         
         # 3. We return the two sub-loop prices 
         return symbolPricesBid, symbolPricesAsk, size
+
+
+    def simulationState(self, i, iMax) : 
+        #print ((float(i)/iMax) % 0.1/100)
+        #if (float(i)/iMax) % 0.1 == 0 : 
+        if (i % self.logEvery == 0) : 
+            print ("i = ",float(i)/iMax*100," %")
 
 
 

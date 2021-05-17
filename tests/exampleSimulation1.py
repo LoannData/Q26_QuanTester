@@ -153,7 +153,7 @@ SIMULATION STEP
 sim = SIMULATION(p, table)
 
 sim.startIndex = 20
-sim.stopIndex = 4000 
+sim.stopIndex = 40000 
 
 
 sim.strategyPath = "/home/loann/Bureau/Dossiers de travail/Quantums_Framework/BackTestModule/tests/"
