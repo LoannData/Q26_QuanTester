@@ -84,7 +84,11 @@ class PRICE :
                         bidClose   = None, 
                         date       = None,
                         dateFormat = None, 
-                        volume     = None) : 
+                        volume     = None, 
+
+                        splitDaysHours    = False, # Case where days and hours infos are not on the same column 
+                        days              = None, 
+                        hours             = None) : 
         """  
         This function allows to define the columns names in the file. 
         """
@@ -110,6 +114,9 @@ class PRICE :
             self.dateFormat = dateFormat
         if volume is not None : 
             self.volume_ = volume 
+        
+        if splitDaysHours : 
+            self.date_ = "split---"+days+"---"+hours
     
     def read(self, path) : 
         """ 
@@ -151,8 +158,18 @@ class PRICE :
         except : 
             pass 
         try : 
-            tempDate      = list(df[self.date_])
-            self.date     = [dt.datetime.strptime(x, self.dateFormat) for x in tempDate] 
+            if not "split" in self.date_ : 
+                tempDate      = list(df[self.date_])
+                self.date     = [dt.datetime.strptime(x, self.dateFormat) for x in tempDate] 
+            else : 
+                locDate = self.date_.split("---")
+                days_  = locDate[1] 
+                hours_ = locDate[2]
+                tempDays      = list(df[days_])
+                tempHours     = list(df[hours_]) 
+                self.date = list() 
+                for i in range(len(tempDays)) : 
+                    self.date.append(dt.datetime.strptime(tempDays[i]+" "+tempHours[i], self.dateFormat))
         except : 
             print ("An error occured")
             pass 

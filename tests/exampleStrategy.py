@@ -3,13 +3,16 @@
 
 import matplotlib.pyplot as plt 
 
+
+        
+
 class STRATEGY : 
     
     def __init__(self) : 
         
-        self.symbolName = "EUR.USD"
-        self.fastMM = 5 
-        self.slowMM = 10 
+        self.symbolName = "AUD.CAD"
+        self.fastMM = 50 
+        self.slowMM = 100 
         
         self.activePosition = False
         self.order = None 
@@ -69,7 +72,7 @@ class STRATEGY :
         """ 
         
         # We retrieve the data we need 
-        data = portfolio.getHistoricalData(self.symbolName, -20, -1, 0, onlyOpen = True)
+        data = portfolio.getHistoricalData(self.symbolName, -200, -1, 0, onlyOpen = True)
         lastPrice = portfolio.getLastPrice(self.symbolName)
         
         # If the market is open, we calculate our Moving averages 

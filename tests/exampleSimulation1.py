@@ -82,16 +82,16 @@ price1 = PRICE("EUR.USD")
 
 
 price1.setColumnsTitle(askOpen    ="askopen", 
-                      askHigh    ="askhigh",
-                      askLow     ="asklow",
-                      askClose   ="askclose", 
-                      bidOpen    ="askopen",
-                      bidHigh    ="askhigh",
-                      bidLow     ="asklow",
-                      bidClose   ="askclose",
-                      date       ="date",
-                      dateFormat = "%Y-%m-%d %H:%M:%S", 
-                      volume     ="volume")
+                      askHigh     ="askhigh",
+                      askLow      ="asklow",
+                      askClose    ="askclose", 
+                      bidOpen     ="askopen",
+                      bidHigh     ="askhigh",
+                      bidLow      ="asklow",
+                      bidClose    ="askclose",
+                      date        ="date",
+                      dateFormat  = "%Y-%m-%d %H:%M:%S", 
+                      volume      ="volume")
 
 price1.read(path)
 price1.setBaseTimeframe(timeframe = dt.timedelta(minutes = 1))

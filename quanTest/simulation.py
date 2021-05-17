@@ -5,6 +5,7 @@ import importlib
 
 from quanTest.analysis import ANALYSIS  
 from quanTest.writer import WRITER 
+from quanTest.diagnostics import TIMER
 
 class SIMULATION(ANALYSIS, WRITER) : 
 
@@ -66,13 +67,19 @@ class SIMULATION(ANALYSIS, WRITER) :
         while i <= iMax : 
 
             # 1. We update the price value in the portfolio 
+            #t1 = TIMER(name = "Price update")
             self.updatePrices(i) 
+            #t1.stop()
 
             # 2. We calculate the EMULATED_PRICE_TABLE object that only contains past data 
+            #t2 = TIMER(name = "History emulation")
             self.updateEmulatedHistory(i)
+            #t2.stop()
 
             # 3. We enter in the sub loop where strategies are executed 
+            #t3 = TIMER(name = "Strategy execution")
             self.subLoop() 
+            #t3.stop()
 
             self.simulationState(i, iMax) 
             #print ("i = ",i,"/",iMax)
