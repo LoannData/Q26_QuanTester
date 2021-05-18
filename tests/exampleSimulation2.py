@@ -102,12 +102,12 @@ SIMULATION STEP
 """
 sim = SIMULATION(p, table)
 
-sim.startIndex = 201
-sim.stopIndex = 40000 
+sim.startIndex = 10010
+sim.stopIndex  = 10020
 
 
-sim.strategyPath = "/home/loann/Bureau/Dossiers de travail/Quantums_Framework/BackTestModule/tests/"
-sim.strategyFile = "exampleStrategy"
+sim.strategyPath = "/home/loann/Travail/Quantums/Travaux/Algorithmes/Quantums_Framework/Q26_StratPool/strategies/Examples/"
+sim.strategyFile = "simpleExample"
 
 sim.importStrategy()
 sim.parametersCheck()

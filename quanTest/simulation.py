@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys, os 
 import importlib
+import datetime as dt 
 
 from quanTest.analysis import ANALYSIS  
 from quanTest.writer import WRITER 
@@ -14,10 +15,13 @@ class SIMULATION(ANALYSIS, WRITER) :
         self.portfolio   = PORTFOLIO 
         self.priceTable  = PRICE_TABLE
 
+        self.portfolio.historicalDataTimeframe = int(self.priceTable.priceList[0].baseTimeframe/dt.timedelta(minutes = 1))
+
         # SECONDARY PARAMETERS
-        self.startIndex   = 0 
-        self.stopIndex    = 999999999999999 
-        self.subLoopModel = "ohlc standard"
+        self.startIndex     = 0 
+        self.stopIndex      = 999999999999999 
+        self.subLoopModel   = "close only"#"ohlc standard"
+        self.maxHstDataSize = 1000
 
 
 
@@ -27,6 +31,7 @@ class SIMULATION(ANALYSIS, WRITER) :
 
         # RUNTIME EVOLVING PARAMETERS 
         self.emulatedPriceTable = None 
+
 
         # LOG PARAMETERS 
         self.logEvery = 100 
@@ -106,7 +111,7 @@ class SIMULATION(ANALYSIS, WRITER) :
         array = dict()
         if index - 1 < 0 : index = 1 
         for key in list(self.portfolio.symbols.keys()) : 
-            array.update({key : self.priceTable.array(key, 0, index, format = "dictionnary")})
+            array.update({key : self.priceTable.array(key, max(0, index - self.maxHstDataSize), index, format = "dictionnary")})
         self.emulatedPriceTable = array 
         self.portfolio.setHistoricalData(self.emulatedPriceTable)
 
@@ -151,10 +156,19 @@ class SIMULATION(ANALYSIS, WRITER) :
             symbolPricesBid.update({key : list()})
 
         # 2. We apply the different sub-scale models 
+        if self.subLoopModel == "close only"    : 
+            size = 1 
+
+            for key in list(symbolPricesAsk.keys()) : 
+                symbolPricesAsk.get(key).append(self.portfolio.symbols.get(key).askclose)
+            
+            for key in list(symbolPricesBid.keys()) : 
+                symbolPricesBid.get(key).append(self.portfolio.symbols.get(key).bidclose)
+
         if self.subLoopModel == "ohlc standard" : 
+            size = 4
             
             for key in list(symbolPricesAsk.keys()) : 
-                size += 1
                 symbolPricesAsk.get(key).append(self.portfolio.symbols.get(key).askopen)
                 symbolPricesAsk.get(key).append(self.portfolio.symbols.get(key).askhigh)
                 symbolPricesAsk.get(key).append(self.portfolio.symbols.get(key).asklow)
@@ -165,6 +179,8 @@ class SIMULATION(ANALYSIS, WRITER) :
                 symbolPricesBid.get(key).append(self.portfolio.symbols.get(key).bidhigh)
                 symbolPricesBid.get(key).append(self.portfolio.symbols.get(key).bidlow)
                 symbolPricesBid.get(key).append(self.portfolio.symbols.get(key).bidclose)
+            
+            #print (list(symbolPricesAsk.keys()))
         
         # 3. We return the two sub-loop prices 
         return symbolPricesBid, symbolPricesAsk, size

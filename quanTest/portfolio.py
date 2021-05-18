@@ -64,6 +64,7 @@ class PORTFOLIO :
 
         # Historical data price 
         self.historicalDataPrice                    = None 
+        self.historicalDataTimeframe                = None # [int] in minutes 
 
         # Trading authorisation 
         self.tradeAuthorisation                     = True 
@@ -663,15 +664,29 @@ class PORTFOLIO :
         """ 
         Function that get ...
         """ 
+        # Case where the timeframe is provided as 0 
+        if timeframe == 0 : 
+            timeframe = self.historicalDataTimeframe
+
+
         if not onlyOpen : 
 
             historicalData = self.historicalDataPrice.get(symbolName)
             df = pd.DataFrame(historicalData)
+
+            # Timeframe conversion 
+            # Here from 00:00 -> 23:59 
+            if timeframe != self.historicalDataTimeframe : 
+                pass 
+
             if (type(dateIni) == dt.datetime(2020, 1, 10, 10, 10) and type(dateIni) == type(dateEnd)) : 
                 df = df.set_index("date") 
                 df = df[dateIni : dateEnd]
             if (type(dateIni) == int and type(dateIni) == type(dateEnd)) : 
-                df = df[dateIni : dateEnd]
+                if dateEnd == 0: 
+                    df = df[-dateIni:]
+                else : 
+                    df = df[-dateIni:-dateEnd]
             dictDf = df.to_dict(orient="list")
             for i in range(len(dictDf.get("date"))) : 
                 dictDf.get("date")[i] = dictDf.get("date")[i].to_pydatetime()
@@ -682,6 +697,7 @@ class PORTFOLIO :
 
             historicalData = self.historicalDataPrice.get(symbolName)
 
+            # !!! This step have to be optimized !!! (too slow)
             historicalData_ = dict()
             for key in list(historicalData.keys()) : 
                 historicalData_.update({key : list()})
@@ -690,13 +706,20 @@ class PORTFOLIO :
                     for key in list(historicalData_.keys()) : 
                         historicalData_.get(key).append(historicalData.get(key)[i])
 
+            # Timeframe conversion 
+            # Here taking account for breaks ...  
+            if timeframe != self.historicalDataTimeframe : 
+                pass 
 
             df = pd.DataFrame(historicalData_)
             if (type(dateIni) == dt.datetime(2020, 1, 10, 10, 10) and type(dateIni) == type(dateEnd)) : 
                 df = df.set_index("date") 
                 df = df[dateIni : dateEnd]
             if (type(dateIni) == int and type(dateIni) == type(dateEnd)) : 
-                df = df[dateIni : dateEnd]
+                if dateEnd == 0: 
+                    df = df[-dateIni:]
+                else : 
+                    df = df[-dateIni:-dateEnd]
             dictDf = df.to_dict(orient="list")
             for i in range(len(dictDf.get("date"))) : 
                 dictDf.get("date")[i] = dictDf.get("date")[i].to_pydatetime()
@@ -727,11 +750,13 @@ class PORTFOLIO :
             "askhigh" : self.symbols.get(symbolName).askhigh, 
             "asklow"  : self.symbols.get(symbolName).asklow, 
             "askclose": self.symbols.get(symbolName).askclose, 
+            "askprice": self.symbols.get(symbolName).askprice,
             "bidopen" : self.symbols.get(symbolName).bidopen, 
             "bidhigh" : self.symbols.get(symbolName).bidhigh, 
             "bidlow"  : self.symbols.get(symbolName).bidlow, 
-            "bidclose": self.symbols.get(symbolName).bidclose, 
-            "time"    : self.symbols.get(symbolName).time, 
+            "bidclose": self.symbols.get(symbolName).bidclose,
+            "bidprice": self.symbols.get(symbolName).bidprice, 
+            "date"    : self.symbols.get(symbolName).time, 
             "volume"  : self.symbols.get(symbolName).volume, 
             "market state" : self.symbols.get(symbolName).marketState   
         }
