@@ -188,8 +188,8 @@ table = PRICE_TABLE([price, price_H1])
 table.synchronize()
 
 name = "AUD.CAD_H1" 
-indexIni = 0
-indexEnd = 10
+indexIni = dt.datetime(2010, 1, 4, 11)#0
+indexEnd = dt.datetime(2010, 1, 4, 23, 30)#10
 
 a = table.array(name, indexIni, indexEnd, format = "dictionnary")
 

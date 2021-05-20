@@ -109,9 +109,19 @@ class SIMULATION(ANALYSIS, WRITER) :
         Function that provide an emulated historical data array according the provided index 
         """ 
         array = dict()
+
         if index - 1 < 0 : index = 1 
+        # We update the array for every base data symbols 
         for key in list(self.portfolio.symbols.keys()) : 
             array.update({key : self.priceTable.array(key, max(0, index - self.maxHstDataSize), index, format = "dictionnary")})
+        
+        # We then update the array for every existing sampled data 
+        for price in self.priceTable.priceList : 
+            if price.sampled : 
+                index_ = price.index[index]
+                array.update({price.name : self.priceTable.array(price.name, max(0, index_ - self.maxHstDataSize), index_, format = "dictionnary")})
+                #########################################################################
+
         self.emulatedPriceTable = array 
         self.portfolio.setHistoricalData(self.emulatedPriceTable)
 

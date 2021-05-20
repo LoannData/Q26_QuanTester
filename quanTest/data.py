@@ -3,6 +3,7 @@
 import pandas as pd 
 import datetime as dt 
 import numpy as np 
+import copy 
 from quanTest import utils 
 
 class PRICE : 
@@ -80,6 +81,10 @@ class PRICE :
 
         # Other informations 
         self.sampled = False # False if original data. True is sampled from sub resolution data 
+        self.index   = list()
+
+    def createCopy(self) : 
+        return copy.deepcopy(price)
 
     def setColumnsTitle(self, 
                         askOpen    = None, 
@@ -545,50 +550,42 @@ class PRICE :
         bidClose = list()
 
         date_     = list() 
-        volume   = list()
+        volume    = list()
+        
         for i in range(len(sampledData)) : 
-            askOpen.append(sampledData[i]["askOpen"].iloc[0])
-            askHigh.append(max(sampledData[i]["askHigh"]))
-            askLow.append(min(sampledData[i]["askLow"])) 
-            askClose.append(sampledData[i]["askClose"].iloc[-1])
-            
-            bidOpen.append(sampledData[i]["bidOpen"].iloc[0])
-            bidHigh.append(max(sampledData[i]["bidHigh"]))
-            bidLow.append(min(sampledData[i]["bidLow"])) 
-            bidClose.append(sampledData[i]["bidClose"].iloc[-1])
-            
-            date_.append(sampledData[i].index[0].to_pydatetime())
-            volume.append(sum(sampledData[i]["volume"]))
+            if len(sampledData[i]) > 0 : 
+                askOpen.append(sampledData[i]["askOpen"].iloc[0])
+                askHigh.append(max(sampledData[i]["askHigh"]))
+                askLow.append(min(sampledData[i]["askLow"])) 
+                askClose.append(sampledData[i]["askClose"].iloc[-1])
+                
+                bidOpen.append(sampledData[i]["bidOpen"].iloc[0])
+                bidHigh.append(max(sampledData[i]["bidHigh"]))
+                bidLow.append(min(sampledData[i]["bidLow"])) 
+                bidClose.append(sampledData[i]["bidClose"].iloc[-1])
+                
+                date_.append(sampledData[i].index[0].to_pydatetime())
+                volume.append(sum(sampledData[i]["volume"]))
 
-        # We create new data lists which will contain future data sampling 
-        askOpen  = list()
-        askHigh  = list()
-        askLow   = list() 
-        askClose = list()
-
-        bidOpen  = list()
-        bidHigh  = list()
-        bidLow   = list() 
-        bidClose = list()
-
-        date_     = list() 
-        volume   = list()
-        for i in range(len(sampledData)) : 
-            askOpen.append(sampledData[i]["askOpen"].iloc[0])
-            askHigh.append(max(sampledData[i]["askHigh"]))
-            askLow.append(min(sampledData[i]["askLow"])) 
-            askClose.append(sampledData[i]["askClose"].iloc[-1])
-            
-            bidOpen.append(sampledData[i]["bidOpen"].iloc[0])
-            bidHigh.append(max(sampledData[i]["bidHigh"]))
-            bidLow.append(min(sampledData[i]["bidLow"])) 
-            bidClose.append(sampledData[i]["bidClose"].iloc[-1])
-            
-            date_.append(sampledData[i].index[0].to_pydatetime())
-            volume.append(sum(sampledData[i]["volume"]))
+            #if len(index) > 0 : 
+            #    index.append(self.date.index(date_[-1], index[-1]))
+            #else : 
+            #    index.append(self.date.index(date_[-1]))
             
 
-
+        index     = list() 
+        j = 0 
+        for i in range(len(self.date)) : 
+            if j+1 < len(date_) : 
+                #print (self.date[i], date_[j], date_[j+1])
+                if self.date[i] < date_[j] and j == 0 : 
+                    index.append(-1)
+                elif (self.date[i] >= date_[j] and self.date[i] < date_[j+1]) : 
+                    index.append(j)
+                    #print (True)
+                else : 
+                    index.append(j+1)
+                    j += 1
             
         self.askOpen = askOpen 
         self.askHigh = askHigh 
@@ -601,7 +598,12 @@ class PRICE :
         self.bidCLose= bidClose 
 
         #print (date_[6])
+
+
+
+
         self.date    = date_ 
+        self.index   = index 
         
         self.volume  = volume  
 
@@ -698,8 +700,17 @@ class PRICE_TABLE :
                     "market status"   : price.marketStatus[indexIni : indexEnd]}
 
         if type(indexIni) == type(dt.datetime(2021, 1, 12, 12, 12)) and type(indexEnd) == type(dt.datetime(2021, 1, 12, 12, 12)) : 
-            locIndexIni = price.date.index(indexIni) 
-            locIndexEnd = price.date.index(indexEnd) 
+
+            locIndexIni_ = min(price.date, key=lambda x: abs(x - indexIni))
+            locIndexEnd_ = min(price.date, key=lambda x: abs(x - indexEnd))
+
+            locIndexIni = price.date.index(locIndexIni_) 
+            locIndexEnd = price.date.index(locIndexEnd_) 
+
+            if locIndexIni_ > indexIni : 
+                locIndexIni -= 1
+            if locIndexEnd_ > indexEnd : 
+                locIndexEnd -= 1 
 
             array_ = {"askopen"       : price.askOpen[locIndexIni : locIndexEnd],
                     "askhigh"         : price.askHigh[locIndexIni : locIndexEnd],
@@ -718,6 +729,14 @@ class PRICE_TABLE :
         if format == "dataframe" : 
             df = pd.DataFrame(data = array_)
             return df 
+
+    def isSampled(self, priceName) : 
+        locIndex = None 
+        for i in range(len(self.priceList)) : 
+            price = self.priceList[i]
+            if price.name == priceName : 
+                locIndex = i
+        return self.priceList[locIndex].sampled
 
 
 

@@ -15,6 +15,7 @@ import pandas as pd
 import datetime as dt 
 import matplotlib.pyplot as plt 
 import pprint
+import copy 
 
 from quanTest.symbol     import SYMBOL
 from quanTest.portfolio  import PORTFOLIO 
@@ -55,12 +56,16 @@ price.shiftMarketTime(timeshift = 0)
 price.dataTimeZone   = 0
 price.marketTimeZone = 0
 price.marketOpeningHour = "00:00"
-price.marketClosingHour = "23:59"
+price.marketClosingHour = "24:00"
 price.marketLunch = None
+price.daysOfWeek = [0, 1, 2, 3, 4, 5, 6]
 
 price.setMarketState() 
 
-table = PRICE_TABLE([price]) 
+price_H1 = copy.deepcopy(price)
+price_H1.resampleData("01:00", name = "AUD.CAD_H1")
+
+table = PRICE_TABLE([price, price_H1]) 
 table.synchronize()
 
 symbol = SYMBOL(symbolName              = "AUD.CAD",
