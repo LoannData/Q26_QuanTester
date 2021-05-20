@@ -56,9 +56,9 @@ price.shiftMarketTime(timeshift = 0)
 price.dataTimeZone   = 0
 price.marketTimeZone = 0
 price.marketOpeningHour = "00:00"
-price.marketClosingHour = "24:00"
-price.marketLunch = None
-price.daysOfWeek = [0, 1, 2, 3, 4, 5, 6]
+price.marketClosingHour = "18:00"
+price.marketLunch = "12:30-13:30"
+price.daysOfWeek = [0, 1, 2, 3, 4]
 
 price.setMarketState() 
 
@@ -107,8 +107,8 @@ SIMULATION STEP
 """
 sim = SIMULATION(p, table)
 
-sim.startIndex = 10010
-sim.stopIndex  = 10020
+sim.startIndex = 11010
+sim.stopIndex  = 11020
 
 
 sim.strategyPath = "/home/loann/Travail/Quantums/Travaux/Algorithmes/Quantums_Framework/Q26_StratPool/strategies/Examples/"

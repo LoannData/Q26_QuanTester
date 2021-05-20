@@ -211,7 +211,7 @@ class PRICE :
             - other models to be defined ... 
 
         """
-        if not self.sampled : 
+        if not self.sampled :
 
             filledAskOpen  = list() 
             filledAskHigh  = list()
@@ -273,6 +273,8 @@ class PRICE :
             self.date     = filledDate 
             self.volume   = filledVolume
 
+
+
     def shiftMarketTime(self, 
                         timeshift = 0) : 
         """ 
@@ -298,6 +300,7 @@ class PRICE :
 
     def setMarketState(self) : 
         
+
         for i in range(len(self.date)) : 
 
             if self.date[i].weekday() not in self.daysOfWeek : 
@@ -344,6 +347,21 @@ class PRICE :
                         if utils.compareHour(hourOfTheDay, ">=", beginBreak) and utils.compareHour(hourOfTheDay, "<=", endBreak) : 
                             locMarketState = "closed"
                 self.marketStatus.append(locMarketState) 
+            
+    def setBaseIndex(self) : 
+
+        #if not self.sampled :
+
+        self.index.append(-1) 
+
+        for i in range (len(self.marketStatus)) : 
+
+            if self.marketStatus[i] == "open" : 
+                self.index.append(self.index[-1] + 1)
+            else : 
+                self.index.append(self.index[-1])
+    
+        del self.index[0]
 
 
 
@@ -646,6 +664,7 @@ class PRICE_TABLE :
 
             self.priceList[i].fillMissingData(model = "constant")
             self.priceList[i].setMarketState() 
+            self.priceList[i].setBaseIndex()
         
         self.synchronized = True 
     

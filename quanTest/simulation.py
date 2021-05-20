@@ -113,14 +113,17 @@ class SIMULATION(ANALYSIS, WRITER) :
         if index - 1 < 0 : index = 1 
         # We update the array for every base data symbols 
         for key in list(self.portfolio.symbols.keys()) : 
-            array.update({key : self.priceTable.array(key, max(0, index - self.maxHstDataSize), index, format = "dictionnary")})
+            index_ = index#self.priceTable.priceList[0].index[index]
+            #index_ = self.priceTable.priceList[0].index.index(index)
+            array.update({key : self.priceTable.array(key, max(0, index_ - self.maxHstDataSize), index_, format = "dictionnary")})
+            # This is perfectly working like this MF ! 
         
         # We then update the array for every existing sampled data 
         for price in self.priceTable.priceList : 
             if price.sampled : 
                 index_ = price.index[index]
                 array.update({price.name : self.priceTable.array(price.name, max(0, index_ - self.maxHstDataSize), index_, format = "dictionnary")})
-                #########################################################################
+                
 
         self.emulatedPriceTable = array 
         self.portfolio.setHistoricalData(self.emulatedPriceTable)
