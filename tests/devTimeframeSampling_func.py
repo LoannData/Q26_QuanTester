@@ -133,134 +133,153 @@ def operation(h1, operator, h2) :
 
 
 
-marketOpeningHour = "09:00"
-marketClosingHour = "18:00"
-marketLunch       = "12:30-13:30"
-marketBreakList   = ["09:30-10:00", "15:30-16:00"]
+def timeSampler(marketOpeningHour,
+                marketClosingHour, 
+                marketLunch, 
+                marketBreakList, 
+                baseTimeframe, 
+                timeframe) :
 
-baseTimeframe = "00:05"
-timeframe = "01:00" 
-
-
-dateList    = list() 
-dateListEnd = list()
-
-# 1. We start with the market open hour 
-dateList.append(marketOpeningHour) 
-dateListEnd.append(operation(dateList[-1], "+", operation(timeframe, "-", baseTimeframe)))
-currentTime = dateList[0] 
-
-marketBreakList_ = marketBreakList.copy() 
-marketBreakList_.append(marketLunch)
-
-# We check that the end of the period is not inside a break 
-insideBreak = False 
-breakIndexList = list()
-for i in range(len(marketBreakList_)) : 
-    if (operation(dateListEnd[-1], ">=", marketBreakList_[i].split("-")[0]) and
-        #operation(dateListEnd[-1], "<", marketBreakList_[i].split("-")[1]) and 
-        operation(dateList[-1], "<", marketBreakList_[i].split("-")[0])): 
-        breakIndexList.append(i)
-        insideBreak = True 
-if insideBreak : 
-    earlyIndex = breakIndexList[0] 
-    for i in range (1, len(breakIndexList)) : 
-        if operation(marketBreakList_[breakIndexList[i]].split("-")[0], "<", marketBreakList_[earlyIndex].split("-")[0]) : 
-            earlyIndex = breakIndexList[i] 
-    dateListEnd[-1] = operation(marketBreakList_[earlyIndex].split("-")[0], "-", baseTimeframe)
-    #dateList[-1] = marketBreakList_[earlyIndex].split("-")[1]
-
-
-
-
-
-while operation(currentTime, "<", marketClosingHour): 
+    dateList    = list() 
+    dateListEnd = list()
     
-    # We add a new period 
-    #dateList.append(operation(currentTime, "+", timeframe)) 
-    dateList.append(operation(dateListEnd[-1], "+", baseTimeframe))
+    # 1. We start with the market open hour 
+    dateList.append(marketOpeningHour) 
     dateListEnd.append(operation(dateList[-1], "+", operation(timeframe, "-", baseTimeframe)))
+    currentTime = dateList[0] 
     
+    marketBreakList_ = marketBreakList.copy() 
     
-    # We check that the end of the period is not inside a break 
-    insideBreak = False 
-    breakIndexList = list()
-    for i in range(len(marketBreakList_)) : 
-        
-        if (operation(dateListEnd[-1], ">=", marketBreakList_[i].split("-")[0]) and
-            #operation(dateListEnd[-1], "<", marketBreakList_[i].split("-")[1]) and 
-            operation(dateList[-1], "<", marketBreakList_[i].split("-")[0])): 
-            
-            breakIndexList.append(i)
-            insideBreak = True 
-    if insideBreak : 
-        earlyIndex = breakIndexList[0] 
-        for i in range (1, len(breakIndexList)) : 
-            if operation(marketBreakList_[breakIndexList[i]].split("-")[0], "<", marketBreakList_[earlyIndex].split("-")[0]) : 
-                earlyIndex = breakIndexList[i] 
-        dateListEnd[-1] = operation(marketBreakList_[earlyIndex].split("-")[0], "-", baseTimeframe)
-        #dateList[-1] = marketBreakList_[earlyIndex].split("-")[1]
+    if marketLunch is not None : 
+        marketBreakList_.append(marketLunch)
     
-    # We check that the begining of the period is not inside a break 
-    insideBreak = False 
-    breakIndexList = list()
-    for i in range(len(marketBreakList_)) : 
-        if (operation(dateList[-1], ">=", marketBreakList_[i].split("-")[0]) and 
-            operation(dateList[-1], "<", marketBreakList_[i].split("-")[1])) : 
-            breakIndexList.append(i)
-            insideBreak = True 
-    
-    if insideBreak : 
-        lateIndex = breakIndexList[0] 
-        for i in range (1, len(breakIndexList)) : 
-            if operation(marketBreakList_[breakIndexList[i]].split("-")[1], ">", marketBreakList_[lateIndex].split("-")[1]) : 
-                lateIndex = breakIndexList[i] 
-                
-        dateList[-1]    = marketBreakList_[lateIndex].split("-")[1]
-        dateListEnd[-1] = operation(dateList[-1], "+", operation(timeframe, "-", baseTimeframe))
-        
+    if len(marketBreakList_) > 0 : 
         # We check that the end of the period is not inside a break 
         insideBreak = False 
         breakIndexList = list()
         for i in range(len(marketBreakList_)) : 
-            
             if (operation(dateListEnd[-1], ">=", marketBreakList_[i].split("-")[0]) and
                 #operation(dateListEnd[-1], "<", marketBreakList_[i].split("-")[1]) and 
                 operation(dateList[-1], "<", marketBreakList_[i].split("-")[0])): 
-                
                 breakIndexList.append(i)
                 insideBreak = True 
         if insideBreak : 
             earlyIndex = breakIndexList[0] 
             for i in range (1, len(breakIndexList)) : 
-                #print(marketBreakList_[i].split("-")[0])
                 if operation(marketBreakList_[breakIndexList[i]].split("-")[0], "<", marketBreakList_[earlyIndex].split("-")[0]) : 
                     earlyIndex = breakIndexList[i] 
             dateListEnd[-1] = operation(marketBreakList_[earlyIndex].split("-")[0], "-", baseTimeframe)
-            #print(dateListEnd[-1])
             #dateList[-1] = marketBreakList_[earlyIndex].split("-")[1]
     
     
-    currentTime = dateList[-1]
-    
-    if operation(dateList[-1], ">=", marketClosingHour) : 
-        del dateList[-1] 
-        del dateListEnd[-1]
-    if operation(dateListEnd[-1], ">", marketClosingHour) : 
-        dateListEnd[-1] = operation(marketClosingHour, "-", baseTimeframe) 
     
     
     
-
+    while operation(currentTime, "<", marketClosingHour): 
+        
+        # We add a new period 
+        #dateList.append(operation(currentTime, "+", timeframe)) 
+        dateList.append(operation(dateListEnd[-1], "+", baseTimeframe))
+        dateListEnd.append(operation(dateList[-1], "+", operation(timeframe, "-", baseTimeframe)))
+        
+        
+        if len(marketBreakList_) > 0 : 
+            # We check that the end of the period is not inside a break 
+            insideBreak = False 
+            breakIndexList = list()
+            for i in range(len(marketBreakList_)) : 
+                
+                if (operation(dateListEnd[-1], ">=", marketBreakList_[i].split("-")[0]) and
+                    #operation(dateListEnd[-1], "<", marketBreakList_[i].split("-")[1]) and 
+                    operation(dateList[-1], "<", marketBreakList_[i].split("-")[0])): 
+                    
+                    breakIndexList.append(i)
+                    insideBreak = True 
+            if insideBreak : 
+                earlyIndex = breakIndexList[0] 
+                for i in range (1, len(breakIndexList)) : 
+                    if operation(marketBreakList_[breakIndexList[i]].split("-")[0], "<", marketBreakList_[earlyIndex].split("-")[0]) : 
+                        earlyIndex = breakIndexList[i] 
+                dateListEnd[-1] = operation(marketBreakList_[earlyIndex].split("-")[0], "-", baseTimeframe)
+                #dateList[-1] = marketBreakList_[earlyIndex].split("-")[1]
             
-    # if marketLunch is not None : 
-    #     if operation(dateList[-1], ">", marketLunch.split("-")[0]) : 
-    #         dateList[-1] = marketLunch 
+            # We check that the begining of the period is not inside a break 
+            insideBreak = False 
+            breakIndexList = list()
+            for i in range(len(marketBreakList_)) : 
+                if (operation(dateList[-1], ">=", marketBreakList_[i].split("-")[0]) and 
+                    operation(dateList[-1], "<", marketBreakList_[i].split("-")[1])) : 
+                    breakIndexList.append(i)
+                    insideBreak = True 
+            
+            if insideBreak : 
+                lateIndex = breakIndexList[0] 
+                for i in range (1, len(breakIndexList)) : 
+                    if operation(marketBreakList_[breakIndexList[i]].split("-")[1], ">", marketBreakList_[lateIndex].split("-")[1]) : 
+                        lateIndex = breakIndexList[i] 
+                        
+                dateList[-1]    = marketBreakList_[lateIndex].split("-")[1]
+                dateListEnd[-1] = operation(dateList[-1], "+", operation(timeframe, "-", baseTimeframe))
+                
+                # We check that the end of the period is not inside a break 
+                insideBreak = False 
+                breakIndexList = list()
+                for i in range(len(marketBreakList_)) : 
+                    
+                    if (operation(dateListEnd[-1], ">=", marketBreakList_[i].split("-")[0]) and
+                        #operation(dateListEnd[-1], "<", marketBreakList_[i].split("-")[1]) and 
+                        operation(dateList[-1], "<", marketBreakList_[i].split("-")[0])): 
+                        
+                        breakIndexList.append(i)
+                        insideBreak = True 
+                if insideBreak : 
+                    earlyIndex = breakIndexList[0] 
+                    for i in range (1, len(breakIndexList)) : 
+                        #print(marketBreakList_[i].split("-")[0])
+                        if operation(marketBreakList_[breakIndexList[i]].split("-")[0], "<", marketBreakList_[earlyIndex].split("-")[0]) : 
+                            earlyIndex = breakIndexList[i] 
+                    dateListEnd[-1] = operation(marketBreakList_[earlyIndex].split("-")[0], "-", baseTimeframe)
+                    #print(dateListEnd[-1])
+                    #dateList[-1] = marketBreakList_[earlyIndex].split("-")[1]
+        
+        
+        currentTime = dateList[-1]
+        
+        if operation(dateList[-1], ">=", marketClosingHour) : 
+            del dateList[-1] 
+            del dateListEnd[-1]
+        if operation(dateListEnd[-1], ">", marketClosingHour) : 
+            dateListEnd[-1] = operation(marketClosingHour, "-", baseTimeframe) 
+        
+        
+        
     
+                
+        # if marketLunch is not None : 
+        #     if operation(dateList[-1], ">", marketLunch.split("-")[0]) : 
+        #         dateList[-1] = marketLunch 
+        
+    
+    candlesList = list() 
+    for i in range(len(dateList)) : 
+        candlesList.append((dateList[i]+"-"+dateListEnd[i]))
+    
+    return candlesList
 
-candlesList = list() 
-for i in range(len(dateList)) : 
-    candlesList.append((dateList[i]+"-"+dateListEnd[i]))
+marketOpeningHour = "00:00"
+marketClosingHour = "24:00"
+marketLunch       = None #"12:30-13:30"
+marketBreakList   = list()#["09:30-10:00", "15:30-16:00"]
+
+baseTimeframe = "00:05"
+timeframe = "01:00" 
+
+candlesList = timeSampler(marketOpeningHour,
+                          marketClosingHour, 
+                          marketLunch, 
+                          marketBreakList, 
+                          baseTimeframe, 
+                          timeframe)
 
 print (candlesList)
 
