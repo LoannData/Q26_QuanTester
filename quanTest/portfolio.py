@@ -216,6 +216,16 @@ class PORTFOLIO :
                 self.executeOrder(symbol, 
                                 orderS, 
                                 type = "close") 
+    
+    def getActivePositions(self, 
+                           symbolName) : 
+
+        activePositions = list()
+        for pos in self.openPositions : 
+            if pos.symbol == symbolName : 
+                activePositions.append(pos)
+        
+        return activePositions
 
     ###################################################################
     # Security check functions. 

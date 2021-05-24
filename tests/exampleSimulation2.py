@@ -30,9 +30,9 @@ INITIALIZATION STEP
 """
 
 path  = "/home/loann/Travail/Quantums/Travaux/Données/Other/HDD/"
-path += "AUDCAD_m5_BidAndAsk.csv"
+path += "EURUSD_m5_BidAndAsk.csv"
 
-price = PRICE("AUD.CAD") 
+price = PRICE("EUR.USD") 
 
 price.setColumnsTitle(askOpen        ="OpenAsk", 
                       askHigh        ="HighAsk",
@@ -56,19 +56,19 @@ price.shiftMarketTime(timeshift = 0)
 price.dataTimeZone   = 0
 price.marketTimeZone = 0
 price.marketOpeningHour = "00:00"
-price.marketClosingHour = "18:00"
-price.marketLunch = "12:30-13:30"
+price.marketClosingHour = "24:00"
+price.marketLunch = None
 price.daysOfWeek = [0, 1, 2, 3, 4]
 
 price.setMarketState() 
 
 price_H1 = copy.deepcopy(price)
-price_H1.resampleData("01:00", name = "AUD.CAD_H1")
+price_H1.resampleData("01:00", name = "EUR.USD_H1")
 
 table = PRICE_TABLE([price, price_H1]) 
 table.synchronize()
 
-symbol = SYMBOL(symbolName              = "AUD.CAD",
+symbol = SYMBOL(symbolName              = "EUR.USD",
                 contractSize            = 100000, 
                 marginCurrency          = "USD", # Can be any existing currency 
                 profitCalculationMethod = "Forex", # "CFD", "Forex", "Stock", "CFD-Index"
@@ -107,8 +107,8 @@ SIMULATION STEP
 """
 sim = SIMULATION(p, table)
 
-sim.startIndex = 11010
-sim.stopIndex  = 11020
+sim.startIndex = 100
+#sim.stopIndex  = 10000
 
 
 sim.strategyPath = "/home/loann/Travail/Quantums/Travaux/Algorithmes/Quantums_Framework/Q26_StratPool/strategies/Examples/"

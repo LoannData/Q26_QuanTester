@@ -13,7 +13,7 @@ class PRICE :
         # Base properties 
         self.name       = name
         
-        # Variables that allow to identify by default the name of the columns in the csv file 
+        # Variables that allow to identify by default the name of the columns in the csv file 
         self.askOpen_    = "askopen"
         self.askHigh_    = "askhigh"
         self.askLow_     = "asklow"
@@ -31,7 +31,7 @@ class PRICE :
 
         self.path        = None
 
-        # Names of each list on the object PRICE
+        # Names of each list on the object PRICE
         self.askOpenTitle  = "askopen"
         self.askHighTitle  = "askhigh"
         self.askLowTitle   = "asklow"
@@ -59,10 +59,10 @@ class PRICE :
         # Days of week where the market is open 
         self.daysOfWeek        = [0, 1, 2, 3, 4, 5, 6] # [#day of the week from 0 to 6]
         # List of dates where the market can be closed (vacancies ...)
-        # To be done ..... 
+        # To be done ..... 
         self.vacations         = list()
 
-        # Initial, file structure 
+        # Initial, file structure 
         self.askOpen  = list()
         self.askHigh  = list()
         self.askLow   = list() 
@@ -310,7 +310,7 @@ class PRICE :
                 locMinute = "0"+str(self.date[i].minute) if self.date[i].minute < 10 else str(self.date[i].minute)
                 hourOfTheDay = locHour+":"+locMinute
 
-                # We shift the hour of the day to have it in a local reference timeframe 
+                # We shift the hour of the day to have it in a local reference timeframe 
                 h_dtz = int(locHour) 
                 h_ut0 = h_dtz - self.dataTimeZone 
                 if h_ut0 < 0 : 
@@ -546,7 +546,7 @@ class PRICE :
                 isMarketOpen = True 
             
             if isMarketOpen : 
-                # 2. We aggregate the data 
+                # 2. We aggregate the data 
                 currentDay = dfList[i].index[0].date()
                 for j in range(len(dayCandleList)) : 
                     timeIni, timeEnd = dayCandleList[j].split("-")[0], dayCandleList[j].split("-")[1]
@@ -659,7 +659,7 @@ class PRICE_TABLE :
             if earlyGeneralEnd > self.priceList[i].date[-1] : 
                 earlyGeneralEnd = self.priceList[i].date[-1]
 
-        # 2. We fill the missing data 
+        # 2. We fill the missing data 
         for i in range(len(self.priceList)) : 
 
             self.priceList[i].fillMissingData(model = "constant")
@@ -668,22 +668,29 @@ class PRICE_TABLE :
         
         self.synchronized = True 
     
-    def iloc(self, index) : 
+    def iloc(self, index, exceptSampled = True) : 
         table = dict() 
         for price in self.priceList : 
-            table.update({price.name : {
-                "askopen"       : price.askOpen[index],
-                "askhigh"       : price.askHigh[index],
-                "asklow"        : price.askLow[index],
-                "askclose"      : price.askClose[index],
-                "bidopen"       : price.bidOpen[index], 
-                "bidhigh"       : price.bidHigh[index], 
-                "bidlow"        : price.bidLow[index], 
-                "bidclose"      : price.bidClose[index], 
-                "time"          : price.date[index], 
-                "volume"        : price.volume[index], 
-                "market status" : price.marketStatus[index] 
-            }})
+            
+            toUpdate = True 
+            if exceptSampled : 
+                if price.sampled : 
+                    toUpdate = False 
+                
+            if toUpdate : 
+                table.update({price.name : {
+                    "askopen"       : price.askOpen[index],
+                    "askhigh"       : price.askHigh[index],
+                    "asklow"        : price.askLow[index],
+                    "askclose"      : price.askClose[index],
+                    "bidopen"       : price.bidOpen[index], 
+                    "bidhigh"       : price.bidHigh[index], 
+                    "bidlow"        : price.bidLow[index], 
+                    "bidclose"      : price.bidClose[index], 
+                    "time"          : price.date[index], 
+                    "volume"        : price.volume[index], 
+                    "market status" : price.marketStatus[index] 
+                }})
         return table 
     
     def len(self) : 

@@ -20,7 +20,7 @@ class SIMULATION(ANALYSIS, WRITER) :
         # SECONDARY PARAMETERS
         self.startIndex     = 0 
         self.stopIndex      = 999999999999999 
-        self.subLoopModel   = "close only"#"ohlc standard"
+        self.subLoopModel   = "ohlc standard"#"close only"#
         self.maxHstDataSize = 1000
 
 
@@ -151,6 +151,7 @@ class SIMULATION(ANALYSIS, WRITER) :
                 self.portfolio.symbols.get(key).setCurrentPrice(bidprice = symbolPricesBid.get(key)[i], 
                                                                 askprice = symbolPricesAsk.get(key)[i])
             self.executeStrategy() 
+            self.portfolio.update()
 
 
 
