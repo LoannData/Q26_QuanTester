@@ -209,7 +209,8 @@ class SIMULATION(ANALYSIS, WRITER) :
         #print ((float(i)/iMax) % 0.1/100)
         #if (float(i)/iMax) % 0.1 == 0 : 
         if (i % self.logEvery == 0) : 
-            print ("i = ",float(i)/iMax*100," %")
+            print ("i = ",float(i)/iMax*100," % - MarginLevel: ",self.portfolio.marginLevel,
+                   ", # Active Pos : ",len(self.portfolio.openPositions))
 
 
 

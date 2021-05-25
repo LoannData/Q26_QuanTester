@@ -85,16 +85,16 @@ symbol = SYMBOL(symbolName              = "EUR.USD",
 
 # We initialize our portfolio 
 p = PORTFOLIO(initialDeposit                  = 100000,                # The initial client deposit 
-              leverage                        = 1,                    # The leverage value (margin = initialDeposit*leverage)
+              leverage                        = 10,                    # The leverage value (margin = initialDeposit*leverage)
               currency                        = "USD",                # The currency 
               positions                       = "long & short",       # "long", "short" or "long & short"
               marginCallTreeshold             = 100,                  # If marginLevel < marginCallTreeshold : Warning (no more trading allowed)
               marginMinimum                   = 50,                   # If marginLevel < marginMinimum : Automatically close all losing positions 
-              minimumBalance                  = 200,                  # If balance < minimumBalance : No more trading allowed 
-              maximumProfit                   = 10000,                # If balance - inialDeposit > maximumProfit : No more trading allowed 
+              minimumBalance                  = 50000,                  # If balance < minimumBalance : No more trading allowed 
+              maximumProfit                   = 100000,                # If balance - inialDeposit > maximumProfit : No more trading allowed 
               maximumDrawDown                 = 70,                   # If drawDown < maximumDrawDown : No more trading allowed 
               maximumConsecutiveLoss          = 50000,                 # If valueLossSerie > maximumConsecutiveLoss : No more trading allowed 
-              maximumConsecutiveGain          = 10000,                # If valueGainSerie > maximumConsecutiveGain : No more trading allowed 
+              maximumConsecutiveGain          = 50000,                # If valueGainSerie > maximumConsecutiveGain : No more trading allowed 
               maximumNumberOfConsecutiveGains = 30)
 
 
@@ -107,9 +107,9 @@ SIMULATION STEP
 """
 sim = SIMULATION(p, table)
 
-sim.startIndex = 10320
-sim.stopIndex  = 10370
-sim.logEvery = 1
+sim.startIndex = 6
+#sim.stopIndex  = 100000
+sim.logEvery = 10000
 
 
 sim.strategyPath = "/home/loann/Travail/Quantums/Travaux/Algorithmes/Quantums_Framework/Q26_StratPool/strategies/Examples/"

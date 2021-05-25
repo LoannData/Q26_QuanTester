@@ -255,7 +255,7 @@ class PORTFOLIO :
         if order.requestMargin > self.availableMargin : 
             if self.verbose : print ("Order cannot be executed. The request margin is higher than the available margin")
             executeOrder = False 
-        if self.availableMargin < symbol.marginPercentage : 
+        if self.marginLevel < symbol.marginPercentage : 
             if self.verbose : print ("Order cannot be executed. Available margin lower than the limit margin")
             executeOrder = False 
         # 2. We check if the volume responds to the constraints 
@@ -285,7 +285,7 @@ class PORTFOLIO :
         locAuthorisation = True 
 
         # 1. The available margin is lower than the margin call treeshold 
-        if self.availableMargin < self.marginCallTreeshold : 
+        if self.marginLevel < self.marginCallTreeshold : 
             locAuthorisation = False   
         # 2. If the balance is lower than the minimum allowed 
         if self.balance < self.minimumBalance : 
@@ -310,6 +310,26 @@ class PORTFOLIO :
         # We associate the trading authorisation to the result of the security checks 
         self.tradeAuthorisation = locAuthorisation
 
+    def checkMarginMinimum(self) : 
+        # If the margin level is below the minimum rate 
+        # we close all the worse positions until the margin level becomes 
+        # higher than this minimum 
+        while self.marginLevel <= self.marginMinimum and len(self.openPositions) > 0 : 
+            
+            minProfit   = np.inf
+            indexLowest = None 
+            # We retrieve the position that has the worse profit 
+            for i in range(len(self.openPositions)) : 
+                if self.openPositions[i].profit < minProfit : 
+                    minProfit   = self.openPositions[i].profit 
+                    indexLowest = i
+            
+            # We close this position 
+            if indexLowest is not None : 
+                #print ("Closed position because bad margin level")
+                self.closePosition(self.openPositions[indexLowest].symbol, self.openPositions[indexLowest])
+            
+            
 
     ###################################################################
     # Evolving parameters functions 
@@ -649,6 +669,7 @@ class PORTFOLIO :
         
         # 3. We check for the security systems 
         self.tradingAuthorisation()
+        self.checkMarginMinimum()
 
         # 4. We check for the pending orders 
         for key in list(self.symbols.keys()) : 
@@ -665,6 +686,7 @@ class PORTFOLIO :
 
         # 7. We check again for the security systems 
         self.tradingAuthorisation()
+        self.checkMarginMinimum()
 
 
     ###################################################################
