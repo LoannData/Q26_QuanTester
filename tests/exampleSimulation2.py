@@ -107,9 +107,9 @@ SIMULATION STEP
 """
 sim = SIMULATION(p, table)
 
-sim.startIndex = 100
-#sim.stopIndex  = 10000
-sim.logEvery = 10000
+sim.startIndex = 10320
+sim.stopIndex  = 10370
+sim.logEvery = 1
 
 
 sim.strategyPath = "/home/loann/Travail/Quantums/Travaux/Algorithmes/Quantums_Framework/Q26_StratPool/strategies/Examples/"

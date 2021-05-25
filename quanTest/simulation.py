@@ -126,6 +126,7 @@ class SIMULATION(ANALYSIS, WRITER) :
         for price in self.priceTable.priceList : 
             if price.sampled : 
                 index_ = price.index[index]
+                #print (index_)
                 array.update({price.name : self.priceTable.array(price.name, max(0, index_ - self.maxHstDataSize), index_, format = "dictionnary")})
                 
 

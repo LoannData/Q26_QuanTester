@@ -84,7 +84,7 @@ class PRICE :
         self.index   = list()
 
     def createCopy(self) : 
-        return copy.deepcopy(price)
+        return copy.deepcopy(self)
 
     def setColumnsTitle(self, 
                         askOpen    = None, 
@@ -598,7 +598,7 @@ class PRICE :
                 #print (self.date[i], date_[j], date_[j+1])
                 if self.date[i] < date_[j] and j == 0 : 
                     index.append(-1)
-                elif (self.date[i] >= date_[j] and self.date[i] < date_[j+1]) : 
+                elif (self.date[i] >= date_[j] and self.date[i] <= date_[j+1]) : 
                     index.append(j)
                     #print (True)
                 else : 
