@@ -34,6 +34,8 @@ class SIMULATION(ANALYSIS, WRITER) :
 
 
         # LOG PARAMETERS 
+        self.verbose  = False 
+        self.portfolio.verbose = self.verbose 
         self.logEvery = 100 
 
         return 
@@ -66,7 +68,7 @@ class SIMULATION(ANALYSIS, WRITER) :
 
     def run(self) : 
         
-        # We initiate the simulation 
+        # We initiate the simulation 
         i = self.startIndex 
         iMax = min(self.priceTable.len(), self.stopIndex)
         while i <= iMax : 
@@ -90,6 +92,8 @@ class SIMULATION(ANALYSIS, WRITER) :
             #print ("i = ",i,"/",iMax)
             # We increment the simulation 
             i += 1
+            
+        print ("Simulation terminated")
     
     def updatePrices(self, index) : 
         """ 
@@ -116,7 +120,7 @@ class SIMULATION(ANALYSIS, WRITER) :
             index_ = index#self.priceTable.priceList[0].index[index]
             #index_ = self.priceTable.priceList[0].index.index(index)
             array.update({key : self.priceTable.array(key, max(0, index_ - self.maxHstDataSize), index_, format = "dictionnary")})
-            # This is perfectly working like this MF ! 
+            # This is perfectly working like this MF ! 
         
         # We then update the array for every existing sampled data 
         for price in self.priceTable.priceList : 

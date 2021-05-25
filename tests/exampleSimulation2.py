@@ -93,7 +93,7 @@ p = PORTFOLIO(initialDeposit                  = 100000,                # The ini
               minimumBalance                  = 200,                  # If balance < minimumBalance : No more trading allowed 
               maximumProfit                   = 10000,                # If balance - inialDeposit > maximumProfit : No more trading allowed 
               maximumDrawDown                 = 70,                   # If drawDown < maximumDrawDown : No more trading allowed 
-              maximumConsecutiveLoss          = 5000,                 # If valueLossSerie > maximumConsecutiveLoss : No more trading allowed 
+              maximumConsecutiveLoss          = 50000,                 # If valueLossSerie > maximumConsecutiveLoss : No more trading allowed 
               maximumConsecutiveGain          = 10000,                # If valueGainSerie > maximumConsecutiveGain : No more trading allowed 
               maximumNumberOfConsecutiveGains = 30)
 
@@ -109,6 +109,7 @@ sim = SIMULATION(p, table)
 
 sim.startIndex = 100
 #sim.stopIndex  = 10000
+sim.logEvery = 10000
 
 
 sim.strategyPath = "/home/loann/Travail/Quantums/Travaux/Algorithmes/Quantums_Framework/Q26_StratPool/strategies/Examples/"

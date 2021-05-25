@@ -59,7 +59,7 @@ class PORTFOLIO :
         self.currentDrawDown                        = 0. 
         self.currentMaximumNumberOfConsecutiveGains = 0 
 
-        # Symbol objects  
+        # Symbol objects  
         self.symbols                                = dict() 
 
         # Historical data price 
@@ -68,6 +68,9 @@ class PORTFOLIO :
 
         # Trading authorisation 
         self.tradeAuthorisation                     = True 
+        
+        # Debug attributes 
+        self.verbose                                = True 
         
         return 
     
@@ -91,7 +94,7 @@ class PORTFOLIO :
 
         #print(symbol.__dict__)
 
-        if symbol is not None : 
+        if symbol is not None and self.tradeAuthorisation : 
 
             orderList = self.createOrder(symbolName = symbolName, 
                                          action     = action,          # "long" or "short"
@@ -106,6 +109,10 @@ class PORTFOLIO :
                                    orderList[0])
             
             return orderList 
+        
+        else : 
+            
+            return [False, False, False]
     
     def editSLOrder(self, 
                     symbolName, 
@@ -148,7 +155,7 @@ class PORTFOLIO :
         
         if inPendingOrders : 
         
-            # Case where the order is a parent one 
+            # Case where the order is a parent one 
             if order.parentID is None : 
 
                 stillAnOrder = True 
@@ -237,37 +244,37 @@ class PORTFOLIO :
         executeOrder = True 
         # A. We check if we have the global trading authorisation 
         if not self.tradeAuthorisation : 
-            print ("Order cannot be executed. Trading un-authorised")
+            if self.verbose : print ("Order cannot be executed. Trading un-authorised")
             executeOrder = False 
         # B. We check if the order action is authorised by the portfolio 
         if not order.action in self.positions : 
-            print ("Order action ",order.action," is not allowed by the portfolio parameters")
+            if self.verbose : print ("Order action ",order.action," is not allowed by the portfolio parameters")
             executeOrder = False 
 
         # 1. We check if we have the request margin 
         if order.requestMargin > self.availableMargin : 
-            print ("Order cannot be executed. The request margin is higher than the available margin")
+            if self.verbose : print ("Order cannot be executed. The request margin is higher than the available margin")
             executeOrder = False 
         if self.availableMargin < symbol.marginPercentage : 
-            print ("Order cannot be executed. Available margin lower than the limit margin")
+            if self.verbose : print ("Order cannot be executed. Available margin lower than the limit margin")
             executeOrder = False 
         # 2. We check if the volume responds to the constraints 
         if order.volume > symbol.maximalVolume or order.volume < symbol.minimalVolume : 
-            print ("Order cannot be executed. The volume amount is not right.") 
+            if self.verbose : print ("Order cannot be executed. The volume amount is not right.") 
             executeOrder = False 
         # 3. We check if the volume step responds to the constrains 
         if order.volume / symbol.volumeStep != int(order.volume / symbol.volumeStep) : 
-            print ("Order cannot be executed. The volume step is not right")
+            if self.verbose : print ("Order cannot be executed. The volume step is not right")
             executeOrder = False
         # 4. We check if the market is open or not 
         if symbol.marketState == "closed" : 
-            print ("Order cannot be executed. The market is closed")
+            if self.verbose : print ("Order cannot be executed. The market is closed")
             executeOrder = False 
         if symbol.marketState == "sell only" and order.action == "long" : 
-            print ("Order cannot be executed. Only sell orders are allowed")
+            if self.verbose : print ("Order cannot be executed. Only sell orders are allowed")
             executeOrder = False 
         if symbol.marketState == "buy only" and order.action == "short" : 
-            print ("Order cannot be executed. Only buy orders are allowed")
+            if self.verbose : print ("Order cannot be executed. Only buy orders are allowed")
             executeOrder = False 
         
         return executeOrder 
@@ -492,7 +499,7 @@ class PORTFOLIO :
                     
                     self.openPositions[openPositionIndex].closed = True 
 
-                    # We operate the transaction 
+                    # We operate the transaction 
                     requestMargin = self.openPositions[openPositionIndex].requestMargin
                     commission = 0. 
 
@@ -501,7 +508,7 @@ class PORTFOLIO :
                     self.availableMargin += requestMargin #+ absoluteProfit_ 
                     self.marginLevel      = np.divide(self.availableMargin, self.usedMargin)*100.
 
-                    # We move the closed order and order associated pending order 
+                    # We move the closed order and order associated pending order 
                     self.closedPositions.append(self.openPositions[openPositionIndex]) 
                     del self.openPositions[openPositionIndex]
 
@@ -558,7 +565,7 @@ class PORTFOLIO :
         
         # If the order is the child of another order 
         if order.parentID is not None : 
-            # Check if the parent of the order have been executed 
+            # Check if the parent of the order have been executed 
             isParentExecuted = False  
             for parent in self.openPositions : 
                 if parent.orderID == order.parentID : 
@@ -674,7 +681,7 @@ class PORTFOLIO :
         """ 
         Function that get ...
         """ 
-        # Case where the timeframe is provided as 0 
+        # Case where the timeframe is provided as 0 
         if timeframe == 0 : 
             timeframe = self.historicalDataTimeframe
 

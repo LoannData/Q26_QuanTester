@@ -11,7 +11,8 @@ class WRITER :
                                  outputFile    = "./closedPositions.csv",
                                  onlyColumns   = [], 
                                  exceptColumns = [], 
-                                 renameColumns = {"possibleClosePrice" : "closePrice", "possibleCloseDate" : "closeDate"}) : 
+                                 renameColumns = {"possibleClosePrice" : "closePrice", "possibleCloseDate" : "closeDate"}, 
+                                 equityCurve   = True) : 
 
         closedPositionsList = self.portfolio.closedPositions 
 
@@ -34,6 +35,10 @@ class WRITER :
             dataFile = dict() 
             for key in keysList : 
                 dataFile.update({key : list()}) 
+            
+            if equityCurve : 
+                equity = self.portfolio.equityCurve.copy()[1:len(closedPositionsList)+1]
+                dataFile.update({"equity" : equity})
             
             for position in closedPositionsList : 
                 for key in keysList : 

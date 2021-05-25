@@ -678,19 +678,36 @@ class PRICE_TABLE :
                     toUpdate = False 
                 
             if toUpdate : 
-                table.update({price.name : {
-                    "askopen"       : price.askOpen[index],
-                    "askhigh"       : price.askHigh[index],
-                    "asklow"        : price.askLow[index],
-                    "askclose"      : price.askClose[index],
-                    "bidopen"       : price.bidOpen[index], 
-                    "bidhigh"       : price.bidHigh[index], 
-                    "bidlow"        : price.bidLow[index], 
-                    "bidclose"      : price.bidClose[index], 
-                    "time"          : price.date[index], 
-                    "volume"        : price.volume[index], 
-                    "market status" : price.marketStatus[index] 
-                }})
+                if index < len(price.date) : 
+                    table.update({price.name : {
+                        "askopen"       : price.askOpen[index],
+                        "askhigh"       : price.askHigh[index],
+                        "asklow"        : price.askLow[index],
+                        "askclose"      : price.askClose[index],
+                        "bidopen"       : price.bidOpen[index], 
+                        "bidhigh"       : price.bidHigh[index], 
+                        "bidlow"        : price.bidLow[index], 
+                        "bidclose"      : price.bidClose[index], 
+                        "time"          : price.date[index], 
+                        "volume"        : price.volume[index], 
+                        "market status" : price.marketStatus[index] 
+                    }})
+                else : 
+                    print ("Index out of range for symbol : ", price.name)
+                    index = -1 
+                    table.update({price.name : {
+                        "askopen"       : price.askOpen[index],
+                        "askhigh"       : price.askHigh[index],
+                        "asklow"        : price.askLow[index],
+                        "askclose"      : price.askClose[index],
+                        "bidopen"       : price.bidOpen[index], 
+                        "bidhigh"       : price.bidHigh[index], 
+                        "bidlow"        : price.bidLow[index], 
+                        "bidclose"      : price.bidClose[index], 
+                        "time"          : price.date[index], 
+                        "volume"        : price.volume[index], 
+                        "market status" : price.marketStatus[index] 
+                    }})
         return table 
     
     def len(self) : 
