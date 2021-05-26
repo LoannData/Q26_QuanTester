@@ -107,13 +107,17 @@ SIMULATION STEP
 """
 sim = SIMULATION(p, table)
 
-sim.startIndex = 6
-#sim.stopIndex  = 100000
+sim.subLoopModel = "close only"
+sim.maxHstDataSize = 2000
+sim.startIndex = 2000
+# sim.stopIndex  = 2100
 sim.logEvery = 10000
 
 
-sim.strategyPath = "/home/loann/Travail/Quantums/Travaux/Algorithmes/Quantums_Framework/Q26_StratPool/strategies/Examples/"
-sim.strategyFile = "simpleExample"
+# sim.strategyPath = "/home/loann/Travail/Quantums/Travaux/Algorithmes/Quantums_Framework/Q26_StratPool/strategies/Examples/"
+# sim.strategyFile = "simpleExample"
+sim.strategyPath = "/home/loann/Travail/Quantums/Travaux/Algorithmes/Quantums_Framework/Q26_StratPool/strategies/RaptorTrend/"
+sim.strategyFile = "raptorTrend"
 
 sim.importStrategy()
 sim.parametersCheck()
