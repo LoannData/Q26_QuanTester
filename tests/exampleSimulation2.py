@@ -109,9 +109,9 @@ sim = SIMULATION(p, table)
 
 sim.subLoopModel = "close only"
 sim.maxHstDataSize = 2000
-sim.startIndex = 2000
-# sim.stopIndex  = 2100
-sim.logEvery = 10000
+sim.startIndex = 3000
+#sim.stopIndex  = 3010
+sim.logEvery = 1000
 
 
 # sim.strategyPath = "/home/loann/Travail/Quantums/Travaux/Algorithmes/Quantums_Framework/Q26_StratPool/strategies/Examples/"

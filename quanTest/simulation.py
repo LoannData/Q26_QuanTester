@@ -53,6 +53,7 @@ class SIMULATION(ANALYSIS, WRITER) :
         #filePath = filePath[:-len(packageName)-1]
         sys.path.append(self.strategyPath) 
         #print (fileName, packageName, filePath)
+        strategy = None 
         strategy = importlib.import_module(self.strategyFile)
         print (strategy)
         #from strategy import STRATEGY 
@@ -209,8 +210,9 @@ class SIMULATION(ANALYSIS, WRITER) :
         #print ((float(i)/iMax) % 0.1/100)
         #if (float(i)/iMax) % 0.1 == 0 : 
         if (i % self.logEvery == 0) : 
-            print ("i = ",float(i)/iMax*100," % - MarginLevel: ",self.portfolio.marginLevel,
-                   ", # Active Pos : ",len(self.portfolio.openPositions))
+            print ("i = ",float(i)/iMax*100," %")
+            # self.showEquityCurve()
+            self.strategy.show(self.portfolio)
 
 
 
