@@ -8,7 +8,63 @@ from quanTest.analysis import ANALYSIS
 from quanTest.writer import WRITER 
 from quanTest.diagnostics import TIMER
 
-class SIMULATION(ANALYSIS, WRITER) : 
+class SIMULATION(ANALYSIS, WRITER) :
+    """ 
+    ===============================================================
+    Q26 - QuanTester module - SIMULATION(ANALYSIS, WRITER) object. 
+    ===============================================================
+    Object type : class(class, class)
+
+    Initialisation attributes : 
+        - PORTFOLIO   [class] 
+        - PRICE_TABLE [class]
+
+    Main Attributes : 
+        - portfolio   [PORTFOLIO]                 : PORTFOLIO()    # Object containing informations about the portfolio 
+        - priceTable  [PRICE_TABLE]               : PRICE_TABLE()  # Object containing aggregated, tabulated and synchronized prices 
+        - portfolio.historicalDataTimeframe[int]  # Integer value of the base simulation timeframe normalized by the 1-minute unit 
+
+    Secondary Attributes : 
+        - startIndex   [int] : 0    
+            - Simulation start index in the data stored in the priceTable attribute 
+        - stopIndex    [int] : 9999999999999999  
+            - Simulation stop index in the data stored in the priceTable attribute (inf = goes to the end of the data array)
+        - subLoopModel [str] : "ohlc standard"
+            - Model that drive how do we make evolve the price at timescales smaller that the timescale of a base candle. 
+            - Models : 
+            - "ohlc standard" : open -> high -> low -> close order, 4 steps model 
+            - "close only"    : close only, 1 step model (fastest)
+        - maxHstDataSize [int] : 1000 
+            - Integer defining the max size of the emulated historical data buffer which will be available for trading strategies 
+
+    Strategy Attributes : 
+        - strategyPath [str] : None 
+            - Absolute path to the strategy python file 
+        - strategyFile [str] : None 
+            - Name of the startegy python file (without the .py extension) 
+        - strategy [python module] : None 
+            - The imported strategy will be stored here 
+
+    Runtime evolving attributes : 
+        - emulatedPriceTable [dict] : None 
+            - Historical data table emulated an available for the trading strategy. The objective is to avoid the ahead bias. 
+    
+    Log attributes : 
+        - verbose [bool] : False 
+            - If True, this parameter shows additionnal informations during the simulation. 
+        - portfolio.verbose [bool] = verbose 
+            - Same but for the portfolio attribute 
+        - logEvery [int] : 100 
+            - This parameter allows to define the regularity at which the simulation shows its advancement state and 
+              activates the show() function in the strategy.STRATEGY object. 
+    
+    Description : 
+        The SIMULATION allows to perform the trading strategy backtest. 
+    
+    To-do list : 
+        - Comment all the functions of the SIMULATION class 
+
+    """  
 
     def __init__(self, PORTFOLIO, PRICE_TABLE) : 
         # MAIN PARAMETERS 
@@ -23,8 +79,7 @@ class SIMULATION(ANALYSIS, WRITER) :
         self.subLoopModel   = "ohlc standard"#"close only"#
         self.maxHstDataSize = 1000
 
-
-
+        # STRATEGY PARAMETERS
         self.strategyPath = None 
         self.strategyFile = None
         self.strategy     = None 
@@ -46,20 +101,11 @@ class SIMULATION(ANALYSIS, WRITER) :
 
     def importStrategy(self) : 
 
-        #fileName, packageName = self.strategyPath.split('/')[-1][:-3], self.strategyPath.split('/')[-2]
-        # filePath = filePath[:-len(fileName)-1-len(packageName)]
-        # filePath = "/home/loann/Travail/Quantums/Travaux/Algorithmes/quantums_trader/qtrader/0.0.1/gui/dash_project/../../"
-        #filePath = self.strategyPath[:-len(fileName)-3]
-        #filePath = filePath[:-len(packageName)-1]
         sys.path.append(self.strategyPath) 
-        #print (fileName, packageName, filePath)
-        strategy = None 
         strategy = importlib.import_module(self.strategyFile)
-        print (strategy)
-        #from strategy import STRATEGY 
         self.strategy = strategy.STRATEGY()
 
-        #sys.path.append(self.strategyPath)
+        return 
 
     
     def parametersCheck(self) : 
