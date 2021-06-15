@@ -66,12 +66,13 @@ class SIMULATION(ANALYSIS, WRITER) :
 
     """  
 
-    def __init__(self, PORTFOLIO, PRICE_TABLE) : 
+    def __init__(self, PORTFOLIO_LIST, PRICE_TABLE) : 
         # MAIN PARAMETERS 
-        self.portfolio   = PORTFOLIO 
+        self.portfolio   = PORTFOLIO_LIST  # List of the initialized portfolio 
         self.priceTable  = PRICE_TABLE
 
-        self.portfolio.historicalDataTimeframe = int(self.priceTable.priceList[0].baseTimeframe/dt.timedelta(minutes = 1))
+        for i in range(len(self.portfolio)) : 
+            self.portfolio[i].historicalDataTimeframe = int(self.priceTable.priceList[0].baseTimeframe/dt.timedelta(minutes = 1))
 
         # SECONDARY PARAMETERS
         self.startIndex     = 0 
@@ -79,10 +80,10 @@ class SIMULATION(ANALYSIS, WRITER) :
         self.subLoopModel   = "ohlc standard"#"close only"#
         self.maxHstDataSize = 1000
 
-        # STRATEGY PARAMETERS
-        self.strategyPath = None 
-        self.strategyFile = None
-        self.strategy     = None 
+        # STRATEGY PARAMETERS
+        self.strategyPath = list() 
+        self.strategyFile = list()
+        self.strategy     = list()
 
         # RUNTIME EVOLVING PARAMETERS 
         self.emulatedPriceTable = None 
@@ -90,7 +91,8 @@ class SIMULATION(ANALYSIS, WRITER) :
 
         # LOG PARAMETERS 
         self.verbose  = False 
-        self.portfolio.verbose = self.verbose 
+        for i in range(len(self.portfolio)) : 
+            self.portfolio[i].verbose = self.verbose 
         self.logEvery = 100 
 
         return 
@@ -100,10 +102,11 @@ class SIMULATION(ANALYSIS, WRITER) :
     ###############################################################
 
     def importStrategy(self) : 
-
-        sys.path.append(self.strategyPath) 
-        strategy = importlib.import_module(self.strategyFile)
-        self.strategy = strategy.STRATEGY()
+        
+        for i in range(len(self.strategyFile)) : 
+            sys.path.append(self.strategyPath[i]) 
+            strategy = importlib.import_module(self.strategyFile[i])
+            self.strategy.append(strategy.STRATEGY())
 
         return 
 
@@ -147,13 +150,14 @@ class SIMULATION(ANALYSIS, WRITER) :
         Function that define the SYMBOL prices in the portfolio as a function of the given index 
         """
         currentPriceTable = self.priceTable.iloc(index)
-        for key in list(self.portfolio.symbols.keys()) : 
-            symbol = self.portfolio.symbols.get(key) 
-            for skey in list(currentPriceTable.get(key).keys()) : 
-                if skey != "market status" : 
-                    setattr(symbol, skey, currentPriceTable.get(key).get(skey))
-                if skey == "market status" : 
-                    setattr(symbol, "marketState", currentPriceTable.get(key).get(skey))
+        for j in range(len(self.portfolio)) : 
+            for key in list(self.portfolio[j].symbols.keys()) : 
+                symbol = self.portfolio[j].symbols.get(key) 
+                for skey in list(currentPriceTable.get(key).keys()) : 
+                    if skey != "market status" : 
+                        setattr(symbol, skey, currentPriceTable.get(key).get(skey))
+                    if skey == "market status" : 
+                        setattr(symbol, "marketState", currentPriceTable.get(key).get(skey))
     
     def updateEmulatedHistory(self, index) : 
         """ 
@@ -163,11 +167,12 @@ class SIMULATION(ANALYSIS, WRITER) :
 
         if index - 1 < 0 : index = 1 
         # We update the array for every base data symbols 
-        for key in list(self.portfolio.symbols.keys()) : 
-            index_ = index#self.priceTable.priceList[0].index[index]
-            #index_ = self.priceTable.priceList[0].index.index(index)
-            array.update({key : self.priceTable.array(key, max(0, index_ - self.maxHstDataSize), index_, format = "dictionnary")})
-            # This is perfectly working like this MF ! 
+        for j in range(len(self.portfolio)) : 
+            for key in list(self.portfolio[j].symbols.keys()) : 
+                index_ = index#self.priceTable.priceList[0].index[index]
+                #index_ = self.priceTable.priceList[0].index.index(index)
+                array.update({key : self.priceTable.array(key, max(0, index_ - self.maxHstDataSize), index_, format = "dictionnary")})
+                # This is perfectly working like this MF ! 
         
         # We then update the array for every existing sampled data 
         for price in self.priceTable.priceList : 
@@ -178,15 +183,16 @@ class SIMULATION(ANALYSIS, WRITER) :
                 
 
         self.emulatedPriceTable = array 
-        self.portfolio.setHistoricalData(self.emulatedPriceTable)
+        for i in range(len(self.portfolio)) : 
+            self.portfolio[i].setHistoricalData(self.emulatedPriceTable)
 
 
     
-    def executeStrategy(self) : 
+    def executeStrategy(self, index = None) : 
         """ 
 
         """
-        self.strategy.run(self.portfolio)
+        self.strategy[index].run(self.portfolio[index])
         pass 
 
     
@@ -194,21 +200,22 @@ class SIMULATION(ANALYSIS, WRITER) :
         """ 
 
         """
-        # 1. We retrieve the sub-loop price sequences 
-        symbolPricesBid, symbolPricesAsk, size = self.subLoopModels()
-
-        # 2. We apply the sub-loop 
-        for i in range(size) : 
-            for key in list(symbolPricesBid.keys()) : 
-                self.portfolio.symbols.get(key).setCurrentPrice(bidprice = symbolPricesBid.get(key)[i], 
-                                                                askprice = symbolPricesAsk.get(key)[i])
-            self.executeStrategy() 
-            self.portfolio.update()
+        for j in range(len(self.portfolio)) : 
+            # 1. We retrieve the sub-loop price sequences 
+            symbolPricesBid, symbolPricesAsk, size = self.subLoopModels(index = j)
+    
+            # 2. We apply the sub-loop 
+            for i in range(size) : 
+                for key in list(symbolPricesBid.keys()) : 
+                    self.portfolio[j].symbols.get(key).setCurrentPrice(bidprice = symbolPricesBid.get(key)[i], 
+                                                                       askprice = symbolPricesAsk.get(key)[i])
+                self.executeStrategy(index = j) 
+                self.portfolio[j].update()
 
 
 
     
-    def subLoopModels(self) : 
+    def subLoopModels(self, index = None) : 
         """ 
         Function that manage the evolution of the price at time scales lower than a candle scale one 
         """
@@ -216,7 +223,7 @@ class SIMULATION(ANALYSIS, WRITER) :
         symbolPricesAsk = dict()
         symbolPricesBid = dict()
         size = 0
-        for key in list(self.portfolio.symbols.keys()) : 
+        for key in list(self.portfolio[index].symbols.keys()) : 
             #symbol = self.portfolio.symbols.get(key) 
             symbolPricesAsk.update({key : list()}) 
             symbolPricesBid.update({key : list()})
@@ -226,25 +233,25 @@ class SIMULATION(ANALYSIS, WRITER) :
             size = 1 
 
             for key in list(symbolPricesAsk.keys()) : 
-                symbolPricesAsk.get(key).append(self.portfolio.symbols.get(key).askclose)
+                symbolPricesAsk.get(key).append(self.portfolio[index].symbols.get(key).askclose)
             
             for key in list(symbolPricesBid.keys()) : 
-                symbolPricesBid.get(key).append(self.portfolio.symbols.get(key).bidclose)
+                symbolPricesBid.get(key).append(self.portfolio[index].symbols.get(key).bidclose)
 
         if self.subLoopModel == "ohlc standard" : 
             size = 4
             
             for key in list(symbolPricesAsk.keys()) : 
-                symbolPricesAsk.get(key).append(self.portfolio.symbols.get(key).askopen)
-                symbolPricesAsk.get(key).append(self.portfolio.symbols.get(key).askhigh)
-                symbolPricesAsk.get(key).append(self.portfolio.symbols.get(key).asklow)
-                symbolPricesAsk.get(key).append(self.portfolio.symbols.get(key).askclose)
+                symbolPricesAsk.get(key).append(self.portfolio[index].symbols.get(key).askopen)
+                symbolPricesAsk.get(key).append(self.portfolio[index].symbols.get(key).askhigh)
+                symbolPricesAsk.get(key).append(self.portfolio[index].symbols.get(key).asklow)
+                symbolPricesAsk.get(key).append(self.portfolio[index].symbols.get(key).askclose)
 
             for key in list(symbolPricesBid.keys()) : 
-                symbolPricesBid.get(key).append(self.portfolio.symbols.get(key).bidopen)
-                symbolPricesBid.get(key).append(self.portfolio.symbols.get(key).bidhigh)
-                symbolPricesBid.get(key).append(self.portfolio.symbols.get(key).bidlow)
-                symbolPricesBid.get(key).append(self.portfolio.symbols.get(key).bidclose)
+                symbolPricesBid.get(key).append(self.portfolio[index].symbols.get(key).bidopen)
+                symbolPricesBid.get(key).append(self.portfolio[index].symbols.get(key).bidhigh)
+                symbolPricesBid.get(key).append(self.portfolio[index].symbols.get(key).bidlow)
+                symbolPricesBid.get(key).append(self.portfolio[index].symbols.get(key).bidclose)
             
             #print (list(symbolPricesAsk.keys()))
         
@@ -252,13 +259,14 @@ class SIMULATION(ANALYSIS, WRITER) :
         return symbolPricesBid, symbolPricesAsk, size
 
 
-    def simulationState(self, i, iMax) : 
+    def simulationState(self, k, iMax) : 
         #print ((float(i)/iMax) % 0.1/100)
         #if (float(i)/iMax) % 0.1 == 0 : 
-        if (i % self.logEvery == 0) : 
-            print ("i = ",float(i)/iMax*100," %")
+        if (k % self.logEvery == 0) : 
+            print ("i = ",float(k)/iMax*100," %")
             # self.showEquityCurve()
-            self.strategy.show(self.portfolio)
+            for i in range(len(self.strategy)) : 
+                self.strategy[i].show(self.portfolio[i])
 
 
 

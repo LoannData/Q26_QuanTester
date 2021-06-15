@@ -105,7 +105,7 @@ p.addSymbol(symbol)
 SIMULATION STEP
 ===============================================================================
 """
-sim = SIMULATION(p, table)
+sim = SIMULATION([p, copy.deepcopy(p)], table)
 
 sim.subLoopModel = "close only"
 sim.maxHstDataSize = 2000
@@ -114,12 +114,18 @@ sim.startIndex = 3000
 sim.logEvery = 1000
 
 
-# sim.strategyPath = "/home/loann/Travail/Quantums/Travaux/Algorithmes/Quantums_Framework/Q26_StratPool/strategies/Examples/"
-# sim.strategyFile = "simpleExample"
-sim.strategyPath = "/home/loann/Travail/Quantums/Travaux/Algorithmes/Quantums_Framework/Q26_StratPool/strategies/RaptorTrend/"
-sim.strategyFile = "raptorTrend"
+stratPath = "/home/loann/Travail/Quantums/Travaux/Algorithmes/Quantums_Framework/Q26_StratPool/strategies/Loann/RaptorTrend/"
+stratFile = "raptorTrend"
 
+sim.strategyPath = [stratPath, stratPath]
+sim.strategyFile = [stratFile, stratFile]
 sim.importStrategy()
+
+sim.strategy[1].retracements = "100-100"
+sim.strategy[1].ratioSLTP = 0.5 
+sim.strategy[1].maxCandleLeg     = 50    # Highest bar length between legs 
+sim.strategy[1].minCandleLeg     = 10 
+
 sim.parametersCheck()
 sim.run()
 

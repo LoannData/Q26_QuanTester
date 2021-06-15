@@ -112,6 +112,7 @@ class PORTFOLIO :
         
         else : 
             
+            #print ("Order not placed")
             return [False, False, False]
     
     def editSLOrder(self, 

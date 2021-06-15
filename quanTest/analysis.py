@@ -8,6 +8,7 @@ class ANALYSIS :
 
 
     def showEquityCurve(self, 
+                        index     = [0],  
                         y_scale   = "linear", # See : https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.yscale.html
                         y_lim     = None, 
                         x_lim     = None,
@@ -17,14 +18,14 @@ class ANALYSIS :
                         linestyle = "-",
                         marker    = None
                         ) : 
-
-        y = self.portfolio.equityCurve
-        
-        if subCurve is not None : 
-            y = y[subCurve[0] : subCurve[1]]
-
         fig, ax = plt.subplots()
-        l1, = ax.plot(y, ls = linestyle, marker = marker)
+        
+        
+        for i in range(len(index)) : 
+            y = self.portfolio[index[i]].equityCurve
+            if subCurve is not None : 
+                y = y[subCurve[0] : subCurve[1]]
+            l1, = ax.plot(y, ls = linestyle, marker = marker)
 
         if y_lim is not None : 
             ax.set_ylim(y_lim[0], y_lim[1])

@@ -8,13 +8,15 @@ class WRITER :
         print ("Hello, I'm a writer")
 
     def writeClosedPositionsFile(self, 
-                                 outputFile    = "./closedPositions.csv",
+                                 index = 0,
+                                 outputFile    = "./closedPositions",
+                                 ext           = "csv",
                                  onlyColumns   = [], 
                                  exceptColumns = [], 
                                  renameColumns = {"possibleClosePrice" : "closePrice", "possibleCloseDate" : "closeDate"}, 
                                  equityCurve   = True) : 
 
-        closedPositionsList = self.portfolio.closedPositions 
+        closedPositionsList = self.portfolio[index].closedPositions 
 
         if len(closedPositionsList) > 0 : 
 
@@ -37,7 +39,7 @@ class WRITER :
                 dataFile.update({key : list()}) 
             
             if equityCurve : 
-                equity = self.portfolio.equityCurve.copy()[1:len(closedPositionsList)+1]
+                equity = self.portfolio[index].equityCurve.copy()[1:len(closedPositionsList)+1]
                 dataFile.update({"equity" : equity})
             
             for position in closedPositionsList : 
@@ -48,7 +50,7 @@ class WRITER :
 
             df.rename(columns = renameColumns, inplace = True)
 
-            df.to_csv(outputFile)
+            df.to_csv(outputFile+"_"+str(index)+"."+ext)
 
 
         else : 
