@@ -116,75 +116,189 @@ class SIMULATION(ANALYSIS, WRITER) :
         print ("This functionnality is not working for instance and need to be coded")
         return
 
-    def run(self) : 
+    def run(self, mode = "sequential", idx = None) : 
         
-        # We initiate the simulation 
-        i = self.startIndex 
-        iMax = min(self.priceTable.len(), self.stopIndex)
-        while i <= iMax : 
-
-            # 1. We update the price value in the portfolio 
-            #t1 = TIMER(name = "Price update")
-            self.updatePrices(i) 
-            #t1.stop()
-
-            # 2. We calculate the EMULATED_PRICE_TABLE object that only contains past data 
-            #t2 = TIMER(name = "History emulation")
-            self.updateEmulatedHistory(i)
-            #t2.stop()
-
-            # 3. We enter in the sub loop where strategies are executed 
-            #t3 = TIMER(name = "Strategy execution")
-            self.subLoop() 
-            #t3.stop()
-
-            self.simulationState(i, iMax) 
-            #print ("i = ",i,"/",iMax)
-            # We increment the simulation 
-            i += 1
+        if mode == "sequential" : 
+        
+            # We initiate the simulation 
+            i = self.startIndex 
+            iMax = min(self.priceTable.len(), self.stopIndex)
+            while i <= iMax : 
+    
+                # 1. We update the price value in the portfolio 
+                #t1 = TIMER(name = "Price update")
+                self.updatePrices(i, mode = "sequential") 
+                #t1.stop()
+    
+                # 2. We calculate the EMULATED_PRICE_TABLE object that only contains past data 
+                #t2 = TIMER(name = "History emulation")
+                self.updateEmulatedHistory(i, mode = "sequential")
+                #t2.stop()
+    
+                # 3. We enter in the sub loop where strategies are executed 
+                #t3 = TIMER(name = "Strategy execution")
+                self.subLoop(mode = "sequential") 
+                #t3.stop()
+    
+                self.simulationState(i, iMax, mode = "sequential") 
+                #print ("i = ",i,"/",iMax)
+                # We increment the simulation 
+                i += 1
+        
+        if mode == "linear" : 
             
+            for j in range(len(self.portfolio)) : 
+                print ("===========================")
+                print ("SIMULATION : ",j,"/",len(self.portfolio))
+                print ("===========================")
+                
+                # We initiate the simulation 
+                i = self.startIndex 
+                iMax = min(self.priceTable.len(), self.stopIndex)
+                while i <= iMax : 
+        
+                    # 1. We update the price value in the portfolio 
+                    #t1 = TIMER(name = "Price update")
+                    self.updatePrices(i, mode = "linear", idx = j) 
+                    #t1.stop()
+        
+                    # 2. We calculate the EMULATED_PRICE_TABLE object that only contains past data 
+                    #t2 = TIMER(name = "History emulation")
+                    self.updateEmulatedHistory(i, mode = "linear", idx = j)
+                    #t2.stop()
+        
+                    # 3. We enter in the sub loop where strategies are executed 
+                    #t3 = TIMER(name = "Strategy execution")
+                    self.subLoop(mode = "linear", idx = j) 
+                    #t3.stop()
+        
+                    self.simulationState(i, iMax, mode = "linear", idx = j) 
+                    #print ("i = ",i,"/",iMax)
+                    # We increment the simulation 
+                    i += 1
+                    
+        if mode == "unique" : 
+            
+            print ("===========================")
+            print ("SIMULATION : ",idx,"/",len(self.portfolio))
+            print ("===========================")
+            
+            # We initiate the simulation 
+            i = self.startIndex 
+            iMax = min(self.priceTable.len(), self.stopIndex)
+            while i <= iMax : 
+    
+                # 1. We update the price value in the portfolio 
+                #t1 = TIMER(name = "Price update")
+                self.updatePrices(i, mode = "linear", idx = idx) 
+                #t1.stop()
+    
+                # 2. We calculate the EMULATED_PRICE_TABLE object that only contains past data 
+                #t2 = TIMER(name = "History emulation")
+                self.updateEmulatedHistory(i, mode = "linear", idx = idx)
+                #t2.stop()
+    
+                # 3. We enter in the sub loop where strategies are executed 
+                #t3 = TIMER(name = "Strategy execution")
+                self.subLoop(mode = "linear", idx = idx) 
+                #t3.stop()
+    
+                self.simulationState(i, iMax, mode = "linear", idx = idx) 
+                #print ("i = ",i,"/",iMax)
+                # We increment the simulation 
+                i += 1
+
+                
         print ("Simulation terminated")
     
-    def updatePrices(self, index) : 
+    def updatePrices(self, index, mode = None, idx = None) : 
         """ 
         Function that define the SYMBOL prices in the portfolio as a function of the given index 
         """
-        currentPriceTable = self.priceTable.iloc(index)
-        for j in range(len(self.portfolio)) : 
-            for key in list(self.portfolio[j].symbols.keys()) : 
-                symbol = self.portfolio[j].symbols.get(key) 
+        
+        if mode == "sequential" : 
+            
+            currentPriceTable = self.priceTable.iloc(index)
+            
+            for j in range(len(self.portfolio)) : 
+                for key in list(self.portfolio[j].symbols.keys()) : 
+                    symbol = self.portfolio[j].symbols.get(key) 
+                    for skey in list(currentPriceTable.get(key).keys()) : 
+                        if skey != "market status" : 
+                            setattr(symbol, skey, currentPriceTable.get(key).get(skey))
+                        if skey == "market status" : 
+                            setattr(symbol, "marketState", currentPriceTable.get(key).get(skey))
+                            
+        if mode == "linear" : 
+            
+            currentPriceTable = self.priceTable.iloc(index)
+
+            for key in list(self.portfolio[idx].symbols.keys()) : 
+                symbol = self.portfolio[idx].symbols.get(key) 
                 for skey in list(currentPriceTable.get(key).keys()) : 
                     if skey != "market status" : 
                         setattr(symbol, skey, currentPriceTable.get(key).get(skey))
                     if skey == "market status" : 
                         setattr(symbol, "marketState", currentPriceTable.get(key).get(skey))
     
-    def updateEmulatedHistory(self, index) : 
+    
+    
+    
+    
+    
+    
+    
+    def updateEmulatedHistory(self, index, mode = None, idx = None) : 
         """ 
         Function that provide an emulated historical data array according the provided index 
         """ 
-        array = dict()
-
-        if index - 1 < 0 : index = 1 
-        # We update the array for every base data symbols 
-        for j in range(len(self.portfolio)) : 
-            for key in list(self.portfolio[j].symbols.keys()) : 
+        if mode == "sequential" : 
+        
+            array = dict()
+    
+            if index - 1 < 0 : index = 1 
+            # We update the array for every base data symbols 
+            for j in range(len(self.portfolio)) : 
+                for key in list(self.portfolio[j].symbols.keys()) : 
+                    index_ = index#self.priceTable.priceList[0].index[index]
+                    #index_ = self.priceTable.priceList[0].index.index(index)
+                    array.update({key : self.priceTable.array(key, max(0, index_ - self.maxHstDataSize), index_, format = "dictionnary")})
+                    # This is perfectly working like this MF ! 
+            
+            # We then update the array for every existing sampled data 
+            for price in self.priceTable.priceList : 
+                if price.sampled : 
+                    index_ = price.index[index]
+                    #print (index_)
+                    array.update({price.name : self.priceTable.array(price.name, max(0, index_ - self.maxHstDataSize), index_, format = "dictionnary")})
+                    
+    
+            self.emulatedPriceTable = array 
+            for i in range(len(self.portfolio)) : 
+                self.portfolio[i].setHistoricalData(self.emulatedPriceTable)
+                
+        if mode == "linear" : 
+        
+            array = dict()
+    
+            if index - 1 < 0 : index = 1 
+            # We update the array for every base data symbols 
+            for key in list(self.portfolio[idx].symbols.keys()) : 
                 index_ = index#self.priceTable.priceList[0].index[index]
                 #index_ = self.priceTable.priceList[0].index.index(index)
                 array.update({key : self.priceTable.array(key, max(0, index_ - self.maxHstDataSize), index_, format = "dictionnary")})
                 # This is perfectly working like this MF ! 
-        
-        # We then update the array for every existing sampled data 
-        for price in self.priceTable.priceList : 
-            if price.sampled : 
-                index_ = price.index[index]
-                #print (index_)
-                array.update({price.name : self.priceTable.array(price.name, max(0, index_ - self.maxHstDataSize), index_, format = "dictionnary")})
-                
-
-        self.emulatedPriceTable = array 
-        for i in range(len(self.portfolio)) : 
-            self.portfolio[i].setHistoricalData(self.emulatedPriceTable)
+            
+            # We then update the array for every existing sampled data 
+            for price in self.priceTable.priceList : 
+                if price.sampled : 
+                    index_ = price.index[index]
+                    #print (index_)
+                    array.update({price.name : self.priceTable.array(price.name, max(0, index_ - self.maxHstDataSize), index_, format = "dictionnary")})
+                    
+    
+            self.emulatedPriceTable = array 
+            self.portfolio[idx].setHistoricalData(self.emulatedPriceTable)
 
 
     
@@ -196,21 +310,36 @@ class SIMULATION(ANALYSIS, WRITER) :
         pass 
 
     
-    def subLoop(self) : 
+    def subLoop(self, mode = None, idx = None) : 
         """ 
 
         """
-        for j in range(len(self.portfolio)) : 
+        if mode == "sequential" : 
+        
+            for j in range(len(self.portfolio)) : 
+                # 1. We retrieve the sub-loop price sequences 
+                symbolPricesBid, symbolPricesAsk, size = self.subLoopModels(index = j)
+        
+                # 2. We apply the sub-loop 
+                for i in range(size) : 
+                    for key in list(symbolPricesBid.keys()) : 
+                        self.portfolio[j].symbols.get(key).setCurrentPrice(bidprice = symbolPricesBid.get(key)[i], 
+                                                                           askprice = symbolPricesAsk.get(key)[i])
+                    self.executeStrategy(index = j) 
+                    self.portfolio[j].update()
+                    
+        if mode == "linear" : 
+        
             # 1. We retrieve the sub-loop price sequences 
-            symbolPricesBid, symbolPricesAsk, size = self.subLoopModels(index = j)
+            symbolPricesBid, symbolPricesAsk, size = self.subLoopModels(index = idx)
     
             # 2. We apply the sub-loop 
             for i in range(size) : 
                 for key in list(symbolPricesBid.keys()) : 
-                    self.portfolio[j].symbols.get(key).setCurrentPrice(bidprice = symbolPricesBid.get(key)[i], 
-                                                                       askprice = symbolPricesAsk.get(key)[i])
-                self.executeStrategy(index = j) 
-                self.portfolio[j].update()
+                    self.portfolio[idx].symbols.get(key).setCurrentPrice(bidprice = symbolPricesBid.get(key)[i], 
+                                                                         askprice = symbolPricesAsk.get(key)[i])
+                self.executeStrategy(index = idx) 
+                self.portfolio[idx].update()
 
 
 
@@ -259,14 +388,21 @@ class SIMULATION(ANALYSIS, WRITER) :
         return symbolPricesBid, symbolPricesAsk, size
 
 
-    def simulationState(self, k, iMax) : 
-        #print ((float(i)/iMax) % 0.1/100)
-        #if (float(i)/iMax) % 0.1 == 0 : 
-        if (k % self.logEvery == 0) : 
-            print ("i = ",float(k)/iMax*100," %")
-            # self.showEquityCurve()
-            for i in range(len(self.strategy)) : 
-                self.strategy[i].show(self.portfolio[i])
+    def simulationState(self, k, iMax, mode = None, idx = None) : 
+        
+        if mode == "sequential" : 
+            
+            if (k % self.logEvery == 0) : 
+                print ("i = ",float(k)/iMax*100," %")
+                # self.showEquityCurve()
+                for i in range(len(self.strategy)) : 
+                    self.strategy[i].show(self.portfolio[i])
+                    
+        if mode == "linear" : 
+            
+            if (k % self.logEvery == 0) : 
+                print ("Simulation : ",idx," - i = ",float(k)/iMax*100," %")
+                self.strategy[idx].show(self.portfolio[idx])
 
 
 
