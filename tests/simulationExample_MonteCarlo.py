@@ -172,7 +172,7 @@ Note that in this step, we prepare the same number of strategies and initial
 portfolio. A strategy and a portfolio interacting together have the same index 
 in the list. 
 """
-N = 10  # Number of strategies 
+N = 100  # Number of strategies 
 
 stratPath = "./"
 stratFile = "strategyExample"
