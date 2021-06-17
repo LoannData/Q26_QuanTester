@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['balance_21',['balance',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#ada1a832558fc1fa898b16604e3aeda25',1,'quanTest::portfolio::PORTFOLIO']]],
+  ['basetimeframe_22',['baseTimeframe',['../classquanTest_1_1data_1_1PRICE.html#afcd52209f28b8dfe7f7c7819786fcf76',1,'quanTest::data::PRICE']]],
+  ['bidclose_23',['bidclose',['../classquanTest_1_1symbol_1_1SYMBOL.html#a046bc38760f9ca447910511e129de7b9',1,'quanTest.symbol.SYMBOL.bidclose()'],['../classquanTest_1_1data_1_1PRICE.html#a6b374b57d0d9d90955eec6fdde09c43f',1,'quanTest.data.PRICE.bidClose()'],['../classquanTest_1_1data_1_1PRICE.html#a3ae9eec59afa9a3700185d1c56376270',1,'quanTest.data.PRICE.bidCLose()']]],
+  ['bidclose_5f_24',['bidClose_',['../classquanTest_1_1data_1_1PRICE.html#ab943e2456b3942639ff357bd10b6e569',1,'quanTest::data::PRICE']]],
+  ['bidclosetitle_25',['bidCloseTitle',['../classquanTest_1_1data_1_1PRICE.html#a60ef6e02fe9143e3578509107d8ce4d4',1,'quanTest::data::PRICE']]],
+  ['bidhigh_26',['bidhigh',['../classquanTest_1_1symbol_1_1SYMBOL.html#a949ed187652a4a6d60731ab39a0efa70',1,'quanTest.symbol.SYMBOL.bidhigh()'],['../classquanTest_1_1data_1_1PRICE.html#a6b4a9111739d351200a69847b65fc61a',1,'quanTest.data.PRICE.bidHigh()']]],
+  ['bidhigh_5f_27',['bidHigh_',['../classquanTest_1_1data_1_1PRICE.html#a3b2eec50007df2bdece634b83bd33484',1,'quanTest::data::PRICE']]],
+  ['bidhightitle_28',['bidHighTitle',['../classquanTest_1_1data_1_1PRICE.html#a81b80c28f3f620a3b611591e29de2003',1,'quanTest::data::PRICE']]],
+  ['bidlow_29',['bidlow',['../classquanTest_1_1symbol_1_1SYMBOL.html#abec592ff6c820a18d45ed7e612e437db',1,'quanTest.symbol.SYMBOL.bidlow()'],['../classquanTest_1_1data_1_1PRICE.html#a9495661c93e94ad09a8d4baca20a8d1c',1,'quanTest.data.PRICE.bidLow()']]],
+  ['bidlow_5f_30',['bidLow_',['../classquanTest_1_1data_1_1PRICE.html#a0ca204a86b94b77ae73df7a456007571',1,'quanTest::data::PRICE']]],
+  ['bidlowtitle_31',['bidLowTitle',['../classquanTest_1_1data_1_1PRICE.html#a60b8e4afd13bec8c4fd57520f5415d89',1,'quanTest::data::PRICE']]],
+  ['bidopen_32',['bidOpen',['../classquanTest_1_1data_1_1PRICE.html#aacf08bb406c6906f9fed2b808b417120',1,'quanTest.data.PRICE.bidOpen()'],['../classquanTest_1_1symbol_1_1SYMBOL.html#a42e8e76311850c5b099fa8ba1cf23590',1,'quanTest.symbol.SYMBOL.bidopen()']]],
+  ['bidopen_5f_33',['bidOpen_',['../classquanTest_1_1data_1_1PRICE.html#ab8a6b40014923871842ece160099bdb8',1,'quanTest::data::PRICE']]],
+  ['bidopentitle_34',['bidOpenTitle',['../classquanTest_1_1data_1_1PRICE.html#a3c509f9e2dd67a3e20c4fdd7914cd46d',1,'quanTest::data::PRICE']]],
+  ['bidprice_35',['bidprice',['../classquanTest_1_1symbol_1_1SYMBOL.html#a87421c512e320947e0ba1774fb8c2d7f',1,'quanTest::symbol::SYMBOL']]],
+  ['brokerloan_36',['brokerLoan',['../classquanTest_1_1order_1_1ORDER.html#a853980a7e43146d7e8b92f42df655e09',1,'quanTest.order.ORDER.brokerLoan()'],['../classquanTest_1_1position_1_1POSITION.html#a2e059fb3460a82cdc7a87bff8e0ad591',1,'quanTest.position.POSITION.brokerLoan()']]]
+];

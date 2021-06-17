@@ -1,0 +1,12 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node10 [label="quanTest.analysis.ANALYSIS",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classquanTest_1_1analysis_1_1ANALYSIS.html",tooltip=" "];
+  Node10 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 [label="quanTest.simulation.SIMULATION",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classquanTest_1_1simulation_1_1SIMULATION.html",tooltip=" "];
+  Node0 [label="quanTest.writer.WRITER",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classquanTest_1_1writer_1_1WRITER.html",tooltip=" "];
+  Node0 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

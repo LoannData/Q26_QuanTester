@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['sayhello_295',['sayHello',['../classquanTest_1_1writer_1_1WRITER.html#a68a9b44f8f5d9b6f08a7b9cfa20c7682',1,'quanTest::writer::WRITER']]],
+  ['setbaseindex_296',['setBaseIndex',['../classquanTest_1_1data_1_1PRICE.html#a65813d9890997e3780bbb105ed12a06c',1,'quanTest::data::PRICE']]],
+  ['setbasetimeframe_297',['setBaseTimeframe',['../classquanTest_1_1data_1_1PRICE.html#abaa7601e2fd797c91e7c7476f7faf9b1',1,'quanTest::data::PRICE']]],
+  ['setcolumnstitle_298',['setColumnsTitle',['../classquanTest_1_1data_1_1PRICE.html#a704312a21cf46a8421035d4596c99869',1,'quanTest::data::PRICE']]],
+  ['setcurrentmarketstate_299',['setCurrentMarketState',['../classquanTest_1_1symbol_1_1SYMBOL.html#a5ae749ce33c6b0ac15bb0b9d5cda03c1',1,'quanTest::symbol::SYMBOL']]],
+  ['setcurrentprice_300',['setCurrentPrice',['../classquanTest_1_1symbol_1_1SYMBOL.html#a5d7ae04f42acd3f0f3b56ce215ce921a',1,'quanTest::symbol::SYMBOL']]],
+  ['setdatatimezone_301',['setDataTimeZone',['../classquanTest_1_1data_1_1PRICE.html#aa23d2ee862977909dbceb04b3037df6a',1,'quanTest::data::PRICE']]],
+  ['sethistoricaldata_302',['setHistoricalData',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a29e27f464cd941fd554dd5dc2f8d9032',1,'quanTest::portfolio::PORTFOLIO']]],
+  ['setmarketstate_303',['setMarketState',['../classquanTest_1_1data_1_1PRICE.html#a74a6c65392b9f666aa36dca8b320943b',1,'quanTest::data::PRICE']]],
+  ['setmarkettimezone_304',['setMarketTimeZone',['../classquanTest_1_1data_1_1PRICE.html#a56bffb3e224906f88709a6c017621e44',1,'quanTest::data::PRICE']]],
+  ['shiftmarkettime_305',['shiftMarketTime',['../classquanTest_1_1data_1_1PRICE.html#a5810e36bce69534026759497fc7999d6',1,'quanTest::data::PRICE']]],
+  ['showequitycurve_306',['showEquityCurve',['../classquanTest_1_1analysis_1_1ANALYSIS.html#a0dbe399f31eaaf217fef606c6bd20045',1,'quanTest::analysis::ANALYSIS']]],
+  ['simulationstate_307',['simulationState',['../classquanTest_1_1simulation_1_1SIMULATION.html#a4439bc6c264ad79f95f5ff3ee6ec08ad',1,'quanTest::simulation::SIMULATION']]],
+  ['stop_308',['stop',['../classquanTest_1_1diagnostics_1_1TIMER.html#a5be68dee208b41c6b12c9de46d166e96',1,'quanTest::diagnostics::TIMER']]],
+  ['subloop_309',['subLoop',['../classquanTest_1_1simulation_1_1SIMULATION.html#a80e787894980c60c0cc4977d2a9465ee',1,'quanTest::simulation::SIMULATION']]],
+  ['subloopmodels_310',['subLoopModels',['../classquanTest_1_1simulation_1_1SIMULATION.html#ad5f7f1cf5b8948f87be069d1224a553a',1,'quanTest::simulation::SIMULATION']]],
+  ['synchronize_311',['synchronize',['../classquanTest_1_1data_1_1PRICE__TABLE.html#adb4727eb3c208498978703ae7b14d20b',1,'quanTest::data::PRICE_TABLE']]]
+];
