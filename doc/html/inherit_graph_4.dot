@@ -4,5 +4,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node0 [label="quanTest.portfolio.PORTFOLIO",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classquanTest_1_1portfolio_1_1PORTFOLIO.html",tooltip=" "];
+  Node0 [label="PRICE_TABLE",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classquanTest_1_1data_1_1PRICE__TABLE.html",tooltip=" "];
 }

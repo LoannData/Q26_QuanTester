@@ -1,11 +1,9 @@
 var searchData=
 [
-  ['datatablename_363',['dataTableName',['../classquanTest_1_1symbol_1_1SYMBOL.html#a1b646ec66e07dfcb2825d2f5c6adaac6',1,'quanTest::symbol::SYMBOL']]],
-  ['datatimezone_364',['dataTimeZone',['../classquanTest_1_1data_1_1PRICE.html#a816b9b91c7683778fd087f8699eda1ae',1,'quanTest::data::PRICE']]],
-  ['date_365',['date',['../classquanTest_1_1data_1_1PRICE.html#a71b72a06bd01a5dab8131276e418a54a',1,'quanTest::data::PRICE']]],
-  ['date_5f_366',['date_',['../classquanTest_1_1data_1_1PRICE.html#ac8a7e89e207bc1880c2e501d540769a1',1,'quanTest::data::PRICE']]],
-  ['dateformat_367',['dateFormat',['../classquanTest_1_1data_1_1PRICE.html#a49e2752b18bcf4a478386d456e545407',1,'quanTest::data::PRICE']]],
-  ['dateformat_5f_368',['dateFormat_',['../classquanTest_1_1data_1_1PRICE.html#ac8a37bcf6d2d8f88af268d6b444e89dd',1,'quanTest::data::PRICE']]],
-  ['datetitle_369',['dateTitle',['../classquanTest_1_1data_1_1PRICE.html#a174d9c58494acac0c336d95043e969d5',1,'quanTest::data::PRICE']]],
-  ['daysofweek_370',['daysOfWeek',['../classquanTest_1_1data_1_1PRICE.html#a573c7947de38a80dd81f7fe6f59e40e6',1,'quanTest::data::PRICE']]]
+  ['startindex_81',['startIndex',['../classquanTest_1_1simulation_1_1SIMULATION.html#af455e46407e8f51cee40291c19378fe2',1,'quanTest::simulation::SIMULATION']]],
+  ['stopindex_82',['stopIndex',['../classquanTest_1_1simulation_1_1SIMULATION.html#ae5668b86c550744a45de290e549880a6',1,'quanTest::simulation::SIMULATION']]],
+  ['strategy_83',['strategy',['../classquanTest_1_1simulation_1_1SIMULATION.html#ab621d71bb2cf38b09419ef3a5047e30c',1,'quanTest::simulation::SIMULATION']]],
+  ['strategyfile_84',['strategyFile',['../classquanTest_1_1simulation_1_1SIMULATION.html#a8a8d3e0753cbc4afd07e5048a2daed8b',1,'quanTest::simulation::SIMULATION']]],
+  ['strategypath_85',['strategyPath',['../classquanTest_1_1simulation_1_1SIMULATION.html#abd75dca5ae675378d255e211f11321eb',1,'quanTest::simulation::SIMULATION']]],
+  ['subloopmodel_86',['subLoopModel',['../classquanTest_1_1simulation_1_1SIMULATION.html#aacf7dc6d4d6b01e42bbd2851baf9c961',1,'quanTest::simulation::SIMULATION']]]
 ];

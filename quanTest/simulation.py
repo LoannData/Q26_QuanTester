@@ -9,97 +9,142 @@ from quanTest.writer import WRITER
 from quanTest.diagnostics import TIMER
 
 class SIMULATION(ANALYSIS, WRITER) :
-    """ 
+    """!
     ===============================================================
     Q26 - QuanTester module - SIMULATION(ANALYSIS, WRITER) object. 
     ===============================================================
-    Object type : class(class, class)
-
-    Initialisation attributes : 
-        - PORTFOLIO   [class] 
-        - PRICE_TABLE [class]
-
-    Main Attributes : 
-        - portfolio   [PORTFOLIO]                 : PORTFOLIO()    # Object containing informations about the portfolio 
-        - priceTable  [PRICE_TABLE]               : PRICE_TABLE()  # Object containing aggregated, tabulated and synchronized prices 
-        - portfolio.historicalDataTimeframe[int]  # Integer value of the base simulation timeframe normalized by the 1-minute unit 
-
-    Secondary Attributes : 
-        - startIndex   [int] : 0    
-            - Simulation start index in the data stored in the priceTable attribute 
-        - stopIndex    [int] : 9999999999999999  
-            - Simulation stop index in the data stored in the priceTable attribute (inf = goes to the end of the data array)
-        - subLoopModel [str] : "ohlc standard"
-            - Model that drive how do we make evolve the price at timescales smaller that the timescale of a base candle. 
-            - Models : 
-            - "ohlc standard" : open -> high -> low -> close order, 4 steps model 
-            - "close only"    : close only, 1 step model (fastest)
-        - maxHstDataSize [int] : 1000 
-            - Integer defining the max size of the emulated historical data buffer which will be available for trading strategies 
-
-    Strategy Attributes : 
-        - strategyPath [str] : None 
-            - Absolute path to the strategy python file 
-        - strategyFile [str] : None 
-            - Name of the startegy python file (without the .py extension) 
-        - strategy [python module] : None 
-            - The imported strategy will be stored here 
-
-    Runtime evolving attributes : 
-        - emulatedPriceTable [dict] : None 
-            - Historical data table emulated an available for the trading strategy. The objective is to avoid the ahead bias. 
+    ### Description :
     
-    Log attributes : 
-        - verbose [bool] : False 
-            - If True, this parameter shows additionnal informations during the simulation. 
-        - portfolio.verbose [bool] = verbose 
-            - Same but for the portfolio attribute 
-        - logEvery [int] : 100 
-            - This parameter allows to define the regularity at which the simulation shows its advancement state and 
-              activates the show() function in the strategy.STRATEGY object. 
+    ### Examples :
     
-    Description : 
-        The SIMULATION allows to perform the trading strategy backtest. 
+    ### Planned developments :
     
-    To-do list : 
-        - Comment all the functions of the SIMULATION class 
+    ### Known bugs :
+    
+    \dontinclude[
+    Do do list : 
+        - Add random ohlc model 
+    ] 
+        
 
     """  
 
     def __init__(self, PORTFOLIO_LIST, PRICE_TABLE) : 
-        # MAIN PARAMETERS 
-        self.portfolio   = PORTFOLIO_LIST  # List of the initialized portfolio 
+        # MAIN PARAMETERS
+        
+        ## ### PORTFOLIO class object. 
+        # **Type** : class PORTFOLIO() \n 
+        # **Description** : \n
+        # This object contains the portfolio informations 
+        self.portfolio   = PORTFOLIO_LIST  
+        ## ### PRICE_TABLE class object. 
+        # **Type** : class PRICE_TABLE() \n 
+        # **Description** : \n
+        # This object contains the global price dataset. 
         self.priceTable  = PRICE_TABLE
 
         for i in range(len(self.portfolio)) : 
             self.portfolio[i].historicalDataTimeframe = int(self.priceTable.priceList[0].baseTimeframe/dt.timedelta(minutes = 1))
 
         # SECONDARY PARAMETERS
+        ## ### Intial index of the simulation. 
+        # **Type :** integer \n
+        # **Defaut value** : 0 \n
+        # **Description** : \n
+        # This index corresponds to the first available index in the 
+        # datasets dedicated to simulate the price evolution.  
         self.startIndex     = 0 
+        ## ### Ending index of the simulation.  
+        # **Type :** integer \n
+        # **Defaut value** : 99999999999999 \n
+        # **Description** : \n
+        # This index corresponds to the last available index in the 
+        # datasets dedicated to simulate the price evolution. 
         self.stopIndex      = 999999999999999 
+        ## ### Model used to cross prices below the candle resolution 
+        # **Type** : string  \n
+        # **Values** : 
+        #   - "ohlc standard" : Prices are presented in the following order, 
+        #                       open -> high -> low -> close 
+        #   - "close only"    : Only close price is presented 
+        #
+        # **Description :** \n
+        # The backtest simulation is defined by presenting a succession of 
+        # candle sampled price, each candle being defined by : Open, High, 
+        # Low, Close. The models define how the prices are successively 
+        # presented to the portfolio at timescales below the candle resolution. 
         self.subLoopModel   = "ohlc standard"#"close only"#
+        ## ### Historical data buffer size 
+        # **Type** : integer \n
+        # **Defaut value** : 1000  \n
+        # **Description** : \n
+        # This value defines the size of the buffer allowed to store any 
+        # historical data price to be accessible by the trading strategies 
+        # the function : getHistoricalData. 
         self.maxHstDataSize = 1000
 
         # STRATEGY PARAMETERS
+        ## ### Strategy path list 
+        # **Type** : list[string] \n 
+        # **Defaut value** : list() \n
+        # **Description** : \n 
+        # This list contains all the paths to the trading strategy to be used 
+        # in the simulation. In case of Monte Carlo type simulations of one 
+        # trading strategy with parameter variations, the same path have to be 
+        # inserted the number of times as the number of variations of the 
+        # strategy parameters to be simulated. 
         self.strategyPath = list() 
+        ## ### Strategy file list 
+        # **Type** : list[string] \n 
+        # **Defaut value** : list() \n
+        # **Description** : \n 
+        # This list contains all the strategy file names (without the .py extension). 
+        # It follows the same structure as for the strategy path list. 
         self.strategyFile = list()
+        ## ### Strategy module list 
+        # **Type** : list[python module] \n 
+        # **Defaut value** : list() \n 
+        # **Description** : \n 
+        # This list contains all the imported strategy modules. In case of a  
+        # simulation with one strategy have been duplicated, every strategy element 
+        # in this list is independant. 
         self.strategy     = list()
 
         # RUNTIME EVOLVING PARAMETERS 
+        ##! \private 
+        # **Description** : 
+        # Variable containing the emulated data price which allows to avoid 
+        # time ahead biases. 
         self.emulatedPriceTable = None 
 
 
         # LOG PARAMETERS 
+        ## ### Debug mode 
+        # **Type** : boolean \n 
+        # **Defaut value** : False \n 
+        # **Description** : 
+        # If True, the simulation will print a lot of debug informations. \n
+        # Warning : This parameter is not fully functionnal yet. 
         self.verbose  = False 
         for i in range(len(self.portfolio)) : 
             self.portfolio[i].verbose = self.verbose 
+        ## ### Log frequency 
+        # **Type** : integer \n 
+        # **Defaut value** : 100 \n 
+        # **Description** : 
+        # If logEvery = 100, each 100 timestep (without considering subcandle timesteps) 
+        # the code will print the simulation advancement and run the function .show() in 
+        # each strategy.STRAGEY() class. 
         self.logEvery = 100 
 
         return 
 
+    """! \dontinclude[
     ###############################################################
     # BACKTEST OPERATIONS
     ###############################################################
+    ]""" 
+
 
     def importStrategy(self) : 
         

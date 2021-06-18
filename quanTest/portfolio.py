@@ -89,6 +89,13 @@ class PORTFOLIO :
                    takeprofit = None, 
                    lmtPrice   = None, 
                    auxPrice   = None ) : 
+        """!
+        This comment is public ...
+        \dontinclude[ A secret , work to be done ... 
+                      Yeh mean ! ]
+        This is nice
+        """
+    
         
         symbol = self.symbols.get(symbolName)
 
@@ -359,6 +366,7 @@ class PORTFOLIO :
     ###################################################################
     # Parametric functions. Cannot be used at an higher level 
     ###################################################################
+    
     def createOrder(self, 
                     symbolName = None,  
                     action     = "long",      # "long" or "short"
@@ -368,6 +376,9 @@ class PORTFOLIO :
                     takeprofit = None, 
                     lmtPrice   = None, 
                     auxPrice   = None ) : 
+        """ 
+        Description example ...
+        """ 
 
 
         # We create the ORDER parent object 

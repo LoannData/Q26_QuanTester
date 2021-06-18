@@ -1,22 +1,4 @@
 var searchData=
 [
-  ['canceldate_37',['cancelDate',['../classquanTest_1_1order_1_1ORDER.html#aa1cff0cf95888d85856301573146855c',1,'quanTest::order::ORDER']]],
-  ['cancelorder_38',['cancelOrder',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a87e921d2d12dbd13f4d1194bfa6bbe61',1,'quanTest::portfolio::PORTFOLIO']]],
-  ['checkexecuteorder_39',['checkExecuteOrder',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#adae7e137b25d4de78e0ab722e24eb964',1,'quanTest::portfolio::PORTFOLIO']]],
-  ['checkmarginminimum_40',['checkMarginMinimum',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#aaac32248e2d7cebf783c0eec5e462879',1,'quanTest::portfolio::PORTFOLIO']]],
-  ['checkpendingorder_41',['checkPendingOrder',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a890e57a9062ba3543750308a18822c81',1,'quanTest::portfolio::PORTFOLIO']]],
-  ['closed_42',['closed',['../classquanTest_1_1position_1_1POSITION.html#a176b076f20532365131bb6682c9ef487',1,'quanTest::position::POSITION']]],
-  ['closedpositions_43',['closedPositions',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a2fe81ee6936b8725a0f9e94f24e8b51d',1,'quanTest::portfolio::PORTFOLIO']]],
-  ['closeposition_44',['closePosition',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a58dc81f4030e85c56fb13064f4a0ce6c',1,'quanTest::portfolio::PORTFOLIO']]],
-  ['comment_45',['comment',['../classquanTest_1_1order_1_1ORDER.html#a9a828b32bb1942ede306116cf12357fd',1,'quanTest.order.ORDER.comment()'],['../classquanTest_1_1position_1_1POSITION.html#ae254d444dca9503a628dbc4333a6e8e2',1,'quanTest.position.POSITION.comment()']]],
-  ['commission_46',['commission',['../classquanTest_1_1order_1_1ORDER.html#a728bd0e00479a7c5c1e68e496f76e2ed',1,'quanTest::order::ORDER']]],
-  ['comparehour_47',['compareHour',['../namespacequanTest_1_1utils.html#a591201a69d254664077d47d0d635dd1f',1,'quanTest::utils']]],
-  ['contractsize_48',['contractSize',['../classquanTest_1_1symbol_1_1SYMBOL.html#a3ae82a7a065617b2ed28999a32343e94',1,'quanTest::symbol::SYMBOL']]],
-  ['createcopy_49',['createCopy',['../classquanTest_1_1data_1_1PRICE.html#a9114833575f56a6d6a45870d780049b8',1,'quanTest::data::PRICE']]],
-  ['createorder_50',['createOrder',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a7f33f1adbb3a661e2e8990b09046bf7f',1,'quanTest::portfolio::PORTFOLIO']]],
-  ['currency_51',['currency',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a80519ae3647f2ae498db8dbdcfc3dae0',1,'quanTest::portfolio::PORTFOLIO']]],
-  ['currentdrawdown_52',['currentDrawDown',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a10055225855965ee7edd760e262ad764',1,'quanTest::portfolio::PORTFOLIO']]],
-  ['currentmaximumnumberofconsecutivegains_53',['currentMaximumNumberOfConsecutiveGains',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a1fec0384f2530d7abf2a7f4319dfa1ac',1,'quanTest::portfolio::PORTFOLIO']]],
-  ['currentvaluegainserie_54',['currentValueGainSerie',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a96e306360309f9a812b1e2990feb9f0b',1,'quanTest::portfolio::PORTFOLIO']]],
-  ['currentvaluelossserie_55',['currentValueLossSerie',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a659bf0c2d63905cba5887381e12bbc0a',1,'quanTest::portfolio::PORTFOLIO']]]
+  ['fillmissingdata_4',['fillMissingData',['../classquanTest_1_1data_1_1PRICE.html#a0c2cfd3bd19b38ea6f35c39b814b5260',1,'quanTest::data::PRICE']]]
 ];

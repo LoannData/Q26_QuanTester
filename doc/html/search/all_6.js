@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['fillmissingdata_82',['fillMissingData',['../classquanTest_1_1data_1_1PRICE.html#ad79b16716e19004bed140850be952d64',1,'quanTest::data::PRICE']]],
-  ['financialtools_2epy_83',['financialTools.py',['../financialTools_8py.html',1,'']]]
+  ['logevery_10',['logEvery',['../classquanTest_1_1simulation_1_1SIMULATION.html#ae3a96c4cfe5a257db8853fc71e34157b',1,'quanTest::simulation::SIMULATION']]]
 ];

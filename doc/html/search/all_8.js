@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['historicaldataprice_89',['historicalDataPrice',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a4e23d3ebad27fa2cbf3d8df4a62a400e',1,'quanTest::portfolio::PORTFOLIO']]],
-  ['historicaldatatimeframe_90',['historicalDataTimeframe',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a3b4c916c84307162f03cb94d35e87c7e',1,'quanTest::portfolio::PORTFOLIO']]]
+  ['order_12',['ORDER',['../classquanTest_1_1order_1_1ORDER.html',1,'quanTest::order']]]
 ];
