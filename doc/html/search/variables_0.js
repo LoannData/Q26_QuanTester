@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['logevery_77',['logEvery',['../classquanTest_1_1simulation_1_1SIMULATION.html#ae3a96c4cfe5a257db8853fc71e34157b',1,'quanTest::simulation::SIMULATION']]]
+  ['availablemargin_103',['availableMargin',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#ab1c8971165d060f50ba873bb2d2229e4',1,'quanTest::portfolio::PORTFOLIO']]]
 ];

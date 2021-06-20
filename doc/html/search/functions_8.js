@@ -1,6 +1,9 @@
 var searchData=
 [
-  ['updateemulatedhistory_74',['updateEmulatedHistory',['../classquanTest_1_1simulation_1_1SIMULATION.html#aa4e4de83dbb86a3a7094c7c25123ace2',1,'quanTest::simulation::SIMULATION']]],
-  ['updateposition_75',['updatePosition',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a73578bc779f7efca7ea8e859caa90ca6',1,'quanTest::portfolio::PORTFOLIO']]],
-  ['updateprices_76',['updatePrices',['../classquanTest_1_1simulation_1_1SIMULATION.html#ae69c9e5afbfc5e521ff11d379a3892f3',1,'quanTest::simulation::SIMULATION']]]
+  ['setbasetimeframe_97',['setBaseTimeframe',['../classquanTest_1_1data_1_1PRICE.html#a3d32bd897cd40ac0ec85de6febf05f74',1,'quanTest::data::PRICE']]],
+  ['setcolumnstitle_98',['setColumnsTitle',['../classquanTest_1_1data_1_1PRICE.html#a1eea86523468850f44d8c2557132fb45',1,'quanTest::data::PRICE']]],
+  ['setcurrentmarketstate_99',['setCurrentMarketState',['../classquanTest_1_1symbol_1_1SYMBOL.html#a84448b46bb7f1696baa3266727fde3b3',1,'quanTest::symbol::SYMBOL']]],
+  ['setdatatimezone_100',['setDataTimeZone',['../classquanTest_1_1data_1_1PRICE.html#ad70db5f93ac51fa6e8ee14cabc34e35a',1,'quanTest::data::PRICE']]],
+  ['setmarkettimezone_101',['setMarketTimeZone',['../classquanTest_1_1data_1_1PRICE.html#a3fd3e6529f2bddd506dd35e0e1401477',1,'quanTest::data::PRICE']]],
+  ['shiftmarkettime_102',['shiftMarketTime',['../classquanTest_1_1data_1_1PRICE.html#a0b2e700242bb65d7904ad46672fe5cbb',1,'quanTest::data::PRICE']]]
 ];

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['verbose_42',['verbose',['../classquanTest_1_1simulation_1_1SIMULATION.html#aa9e289eddb591991c9bc7321dc5b186b',1,'quanTest::simulation::SIMULATION']]]
+  ['timer_67',['TIMER',['../classquanTest_1_1diagnostics_1_1TIMER.html',1,'quanTest::diagnostics']]],
+  ['tradeauthorisation_68',['tradeAuthorisation',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#acc31717e039983440c783dc7b0e096ee',1,'quanTest::portfolio::PORTFOLIO']]]
 ];

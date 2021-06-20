@@ -111,7 +111,7 @@ price_H1 = copy.deepcopy(price)
 # Here this dataset object is resampled to be used in the simulation. 
 # The resampling process is exactly the same as you can see 
 # on trading platforms. 
-price_H1.resampleData("01:00", name = "EUR.USD_H1")
+price_H1.resampleData("01:00", name = "EUR.USD")
 
 # We generate our data table which will be involved in the simulation 
 table = PRICE_TABLE([price, price_H1]) 

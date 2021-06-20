@@ -1,5 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""! 
+=============================================================
+Q26 - QuanTester Python File
+=============================================================
+
+\dontinclude[
+    Every function need to have a description header following this 
+    template : 
+        
+        **Description :** 
+            
+            None
+        
+        **Parameters :** 
+            
+            None 
+        
+        **Returns :** 
+            
+            None 
+            
+            ]
+
+""" 
 import sys, os 
 import importlib
 import datetime as dt 
@@ -147,6 +171,22 @@ class SIMULATION(ANALYSIS, WRITER) :
 
 
     def importStrategy(self) : 
+        """! 
+        **Description :** 
+            
+            This function allows to import strategy files as a strategy module. 
+            If a given strategy is imported number of times (the strategyFiles and 
+            strategyPath lists contain a multiplicity of the same file/path), the 
+            imported strategy modules are independent one from each others. 
+        
+        **Parameters :** 
+            
+            None 
+        
+        **Returns :** 
+            
+            None 
+        """
         
         for i in range(len(self.strategyFile)) : 
             sys.path.append(self.strategyPath[i]) 
@@ -157,11 +197,56 @@ class SIMULATION(ANALYSIS, WRITER) :
 
     
     def parametersCheck(self) : 
+        """! 
+        **Description** : 
+            
+            This function checks that everything is fine before running the 
+            simulation. 
+            !!! This function is not working yet !!! 
+            
+        **Parameters :** 
+        
+            None 
+            
+        **Returns :** 
+        
+            None 
+            
+        \dontinclude[
+            To be done : 
+                - Think about the different control steps ]
+        """ 
         print ("Everything is fine, the simulation can be launched !")
         print ("This functionnality is not working for instance and need to be coded")
         return
 
     def run(self, mode = "sequential", idx = None) : 
+        """! 
+        **Description :** 
+        
+            Main function of the simulation. This function initiate the time 
+            loop where at each time step, a new price is presented to the 
+            portfolio. 
+        
+        **Parameters :** 
+        
+            - mode [int] = "sequential" : Drives the way for the simulation to 
+                                          be done. The different parameters are : 
+                                              - "sequential" : every couple portfolio/strategy is updated at each time step 
+                                              - "linear" : the algorithm simulate sequentially each couple portfolio/strategy 
+                                              - "unique" : given an idx index, only the couple indexed by idx is simulated 
+            - idx [int] = None : If mode == "unique", this parameters represent the index of the couple portfolio/strategy 
+                                 to be backtested.
+        
+        **Returns** : 
+            
+            None 
+        
+        \dontinclude[
+            To be done : 
+                - Find a way to parallelise simulation inside this function]
+        
+        """ 
         
         if mode == "sequential" : 
         
@@ -257,8 +342,23 @@ class SIMULATION(ANALYSIS, WRITER) :
         print ("Simulation terminated")
     
     def updatePrices(self, index, mode = None, idx = None) : 
-        """ 
-        Function that define the SYMBOL prices in the portfolio as a function of the given index 
+        """! \private
+        **Description :** 
+            
+            Function that define the SYMBOL prices in the portfolio as a 
+            function of the given index. 
+        
+        **Parameters :** 
+            
+            None 
+        
+        **Returns :** 
+            
+            None 
+        
+        Do be done : 
+            - Detail more the description of this function. 
+        
         """
         
         if mode == "sequential" : 
@@ -288,14 +388,24 @@ class SIMULATION(ANALYSIS, WRITER) :
     
     
     
-    
+
     
     
     
     
     def updateEmulatedHistory(self, index, mode = None, idx = None) : 
-        """ 
-        Function that provide an emulated historical data array according the provided index 
+        """! \private
+        **Description :** 
+            
+            Function that provide an emulated historical data array according the provided index 
+        
+        **Parameters :** 
+            
+            None 
+        
+        **Returns :** 
+            
+            None 
         """ 
         if mode == "sequential" : 
         
@@ -348,16 +458,36 @@ class SIMULATION(ANALYSIS, WRITER) :
 
     
     def executeStrategy(self, index = None) : 
-        """ 
-
+        """! \private
+        **Description :** 
+            
+            None
+        
+        **Parameters :** 
+            
+            None 
+        
+        **Returns :** 
+            
+            None 
         """
         self.strategy[index].run(self.portfolio[index])
         pass 
 
     
     def subLoop(self, mode = None, idx = None) : 
-        """ 
-
+        """! \private
+        **Description :** 
+            
+            None
+        
+        **Parameters :** 
+            
+            None 
+        
+        **Returns :** 
+            
+            None 
         """
         if mode == "sequential" : 
         
@@ -390,8 +520,18 @@ class SIMULATION(ANALYSIS, WRITER) :
 
     
     def subLoopModels(self, index = None) : 
-        """ 
-        Function that manage the evolution of the price at time scales lower than a candle scale one 
+        """! \private 
+        **Description :** 
+            
+            Function that manage the evolution of the price at time scales lower than a candle scale one 
+        
+        **Parameters :** 
+            
+            None 
+        
+        **Returns :** 
+            
+            None 
         """
         # 1. We define a symbolPrice sequence dict 
         symbolPricesAsk = dict()
@@ -434,6 +574,19 @@ class SIMULATION(ANALYSIS, WRITER) :
 
 
     def simulationState(self, k, iMax, mode = None, idx = None) : 
+        """! \private  
+        **Description :** 
+            
+            None
+        
+        **Parameters :** 
+            
+            None 
+        
+        **Returns :** 
+            
+            None 
+        """
         
         if mode == "sequential" : 
             

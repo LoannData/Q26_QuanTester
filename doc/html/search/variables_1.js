@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['maxhstdatasize_78',['maxHstDataSize',['../classquanTest_1_1simulation_1_1SIMULATION.html#af757bfcb1074d9a27956fc21262a17d8',1,'quanTest::simulation::SIMULATION']]]
+  ['balance_104',['balance',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a1e7ef09ce66d09456a55c47a8c42f3dc',1,'quanTest::portfolio::PORTFOLIO']]]
 ];

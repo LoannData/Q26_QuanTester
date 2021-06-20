@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['read_64',['read',['../classquanTest_1_1data_1_1PRICE.html#a523730f8f49f1bfa0f7bbb607be45ce5',1,'quanTest::data::PRICE']]]
+  ['parameterscheck_93',['parametersCheck',['../classquanTest_1_1simulation_1_1SIMULATION.html#a1a5d3d934ee8581bc1f4b60d1aa9b767',1,'quanTest::simulation::SIMULATION']]],
+  ['placeorder_94',['placeOrder',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a0d22b82a1f3bc98ce7c4cb7cf6c3beb9',1,'quanTest::portfolio::PORTFOLIO']]]
 ];

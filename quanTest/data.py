@@ -634,9 +634,9 @@ class PRICE :
         #print(self.date[6])
 
         if name is not None : 
-            self.name = name 
+            self.name = name+"_"+str(int(newTimeFrame.split(":")[0])*60 + int(newTimeFrame.split(":")[1])) 
         else : 
-            self.name += "_resampled"
+            self.name += "_resampled"+str(int(newTimeFrame.split(":")[0])*60 + int(newTimeFrame.split(":")[1])) 
         
 
 class PRICE_TABLE : 

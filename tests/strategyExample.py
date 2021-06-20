@@ -38,7 +38,7 @@ class STRATEGY :
         #        have to be the the exact same as the ones defined in 
         #        the simulation header file 
         self.symbolName = "EUR.USD"
-        self.hstDataExt = "_H1"
+        self.timeframe = 60
         
         
         # Moving average parameters 
@@ -73,8 +73,8 @@ class STRATEGY :
         # If the market if open 
         if self.lastPrice.get("market state") == "open" : 
             # We ask for 2 datasets in H1 period 
-            self.dataSet1 = client.getHistoricalData(self.symbolName+self.hstDataExt, self.SMA1_period, 0, 0, onlyOpen = True)
-            self.dataSet2 = client.getHistoricalData(self.symbolName+self.hstDataExt, self.SMA2_period, 0, 0, onlyOpen = True)
+            self.dataSet1 = client.getHistoricalData(self.symbolName, self.SMA1_period, 0, self.timeframe, onlyOpen = True)
+            self.dataSet2 = client.getHistoricalData(self.symbolName, self.SMA2_period, 0, self.timeframe, onlyOpen = True)
             # We calculate 2 SMA indicators 
             if len(self.dataSet1.get("askclose")) > 0 : 
                 self.SMA1 = SMA(self.dataSet1.get("askclose"), period = self.SMA1_period, offset = 0)
