@@ -106,7 +106,7 @@ price.setMarketState()
 
 # From the price object, it is possible to define another exact same object 
 # thanks to the deepcopy function
-price_H1 = copy.deepcopy(price)
+price_H1 = price.createCopy()
 # Here this dataset object is resampled to be used in the simulation. 
 # The resampling process is exactly the same as you can see 
 # on trading platforms. 

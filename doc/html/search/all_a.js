@@ -1,5 +1,25 @@
 var searchData=
 [
-  ['openpositions_38',['openPositions',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a85c2582eb41c476113e754b64f351e4d',1,'quanTest::portfolio::PORTFOLIO']]],
-  ['order_39',['ORDER',['../classquanTest_1_1order_1_1ORDER.html',1,'quanTest::order']]]
+  ['margincalltreeshold_56',['marginCallTreeshold',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a23daf2d0aa17f7599f8d0de4a533a5e9',1,'quanTest::portfolio::PORTFOLIO']]],
+  ['margincurrency_57',['marginCurrency',['../classquanTest_1_1symbol_1_1SYMBOL.html#abffdb244118559384a16382230af3dee',1,'quanTest::symbol::SYMBOL']]],
+  ['marginlevel_58',['marginLevel',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a604f83d2f1f4aaaaf294cc616975a0e1',1,'quanTest::portfolio::PORTFOLIO']]],
+  ['marginminimum_59',['marginMinimum',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a1c703c357b8bedde5d839821d37cc62e',1,'quanTest::portfolio::PORTFOLIO']]],
+  ['marginpercentage_60',['marginPercentage',['../classquanTest_1_1symbol_1_1SYMBOL.html#ab0ed24a93ef4ccf48afac3781f412da7',1,'quanTest::symbol::SYMBOL']]],
+  ['marginrequestmethod_61',['marginRequestMethod',['../classquanTest_1_1symbol_1_1SYMBOL.html#a4c78638713fef7584fec699b7f36347e',1,'quanTest::symbol::SYMBOL']]],
+  ['marketbreaklist_62',['marketBreakList',['../classquanTest_1_1data_1_1PRICE.html#a132be36260bbcb2c2c167a04fe10fa0e',1,'quanTest::data::PRICE']]],
+  ['marketclosinghour_63',['marketClosingHour',['../classquanTest_1_1data_1_1PRICE.html#ab13a9e8a6db175768b4e368ad3ee59b8',1,'quanTest::data::PRICE']]],
+  ['marketlunch_64',['marketLunch',['../classquanTest_1_1data_1_1PRICE.html#ace549963c5563bccc1fbca05d46b4704',1,'quanTest::data::PRICE']]],
+  ['marketopeninghour_65',['marketOpeningHour',['../classquanTest_1_1data_1_1PRICE.html#ad1a1c4329adc3b0acb3ba2ec439482aa',1,'quanTest::data::PRICE']]],
+  ['marketstate_66',['marketState',['../classquanTest_1_1symbol_1_1SYMBOL.html#aa0606a59b55ace47e3e7b5d428f362d1',1,'quanTest::symbol::SYMBOL']]],
+  ['marketstatus_67',['marketStatus',['../classquanTest_1_1data_1_1PRICE.html#a52dc307284bec8baf3982980000a9495',1,'quanTest::data::PRICE']]],
+  ['markettimezone_68',['marketTimeZone',['../classquanTest_1_1data_1_1PRICE.html#a6ce6926a989656db2a02ad5014d6b8f9',1,'quanTest::data::PRICE']]],
+  ['maxhstdatasize_69',['maxHstDataSize',['../classquanTest_1_1simulation_1_1SIMULATION.html#af757bfcb1074d9a27956fc21262a17d8',1,'quanTest::simulation::SIMULATION']]],
+  ['maximalvolume_70',['maximalVolume',['../classquanTest_1_1symbol_1_1SYMBOL.html#a02b48b91f0dc36e47374f4ba37185964',1,'quanTest::symbol::SYMBOL']]],
+  ['maximumconsecutivegain_71',['maximumConsecutiveGain',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a077d3da7b69803e2f237f23fb67c62b5',1,'quanTest::portfolio::PORTFOLIO']]],
+  ['maximumconsecutiveloss_72',['maximumConsecutiveLoss',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a17b454130e766c4cb4c9ec7bb0b45756',1,'quanTest::portfolio::PORTFOLIO']]],
+  ['maximumdrawdown_73',['maximumDrawDown',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a2ff99e69292c319d643111a190608613',1,'quanTest::portfolio::PORTFOLIO']]],
+  ['maximumnumberofconsecutivegains_74',['maximumNumberOfConsecutiveGains',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#ae0d212f249d5fc7ea45c089eb8d5934e',1,'quanTest::portfolio::PORTFOLIO']]],
+  ['maximumprofit_75',['maximumProfit',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#aab0d88fe92cfa90a6c468309670a45cd',1,'quanTest::portfolio::PORTFOLIO']]],
+  ['minimalvolume_76',['minimalVolume',['../classquanTest_1_1symbol_1_1SYMBOL.html#a69a5bf5e181207a2cf0a65a95e08ce8a',1,'quanTest::symbol::SYMBOL']]],
+  ['minimumbalance_77',['minimumBalance',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#a81fec72c023e3324c934cb7cf1812fb5',1,'quanTest::portfolio::PORTFOLIO']]]
 ];

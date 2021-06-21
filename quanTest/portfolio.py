@@ -1,5 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""! 
+=============================================================
+Q26 - QuanTester Python File
+=============================================================
+
+\dontinclude[
+    Every function need to have a description header following this 
+    template : 
+        
+        **Description :** 
+            
+            None
+        
+        **Parameters :** 
+            
+            None 
+        
+        **Returns :** 
+            
+            None 
+            
+            ]
+
+""" 
 
 import numpy as np 
 import pandas as pd 

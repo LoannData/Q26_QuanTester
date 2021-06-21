@@ -1,5 +1,29 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""! 
+=============================================================
+Q26 - QuanTester Python File
+=============================================================
+
+\dontinclude[
+    Every function need to have a description header following this 
+    template : 
+        
+        **Description :** 
+            
+            None
+        
+        **Parameters :** 
+            
+            None 
+        
+        **Returns :** 
+            
+            None 
+            
+            ]
+
+""" 
 import pandas as pd 
 import datetime as dt 
 import numpy as np 
@@ -7,83 +31,260 @@ import copy
 from quanTest import utils 
 
 class PRICE : 
+    """!
+    ===============================================================
+    Q26 - QuanTester module - PRICE object. 
+    ===============================================================
+    ### Description :
+    
+    ### Examples :
+    
+    ### Planned developments :
+    
+    ### Known bugs :
+    
+    \dontinclude[
+    Do do list : 
+        - 
+    ] 
+        
+
+    """ 
 
     def __init__(self, name) : 
 
         # Base properties 
+        ## ### Dataset name  
+        # **Type** : string \n 
+        # **Description** : \n 
+        # Dataset name. The dataset name should be the exact same of 
+        # a SYMBOL name embedded in the PORTFOLIO.
         self.name       = name
         
         # Variables that allow to identify by default the name of the columns in the csv file 
+        ##! \private
         self.askOpen_    = "askopen"
+        ##! \private
         self.askHigh_    = "askhigh"
+        ##! \private
         self.askLow_     = "asklow"
+        ##! \private
         self.askClose_   = "askclose"
 
+        ##! \private
         self.bidOpen_    = "bidopen"
+        ##! \private
         self.bidHigh_    = "bidhigh"
+        ##! \private
         self.bidLow_     = "bidlow"
+        ##! \private
         self.bidClose_   = "bidclose"
 
+        ##! \private
         self.date_       = "time" 
+        ##! \private
         self.dateFormat_ = "%Y-%m-%d %H:%M:%S"
+        ##! \private
         self.volume_     = "volume"
 
-
+        ##! \private
         self.path        = None
 
         # Names of each list on the object PRICE
+        ##! \private
         self.askOpenTitle  = "askopen"
+        ##! \private
         self.askHighTitle  = "askhigh"
+        ##! \private
         self.askLowTitle   = "asklow"
+        ##! \private
         self.askCloseTitle = "askclose"
 
+        ##! \private
         self.bidOpenTitle  = "bidopen"
+        ##! \private
         self.bidHighTitle  = "bidhigh"
+        ##! \private
         self.bidLowTitle   = "bidlow"
+        ##! \private
         self.bidCloseTitle = "bidclose"
 
+        ##! \private
         self.dateTitle     = "time" 
+        ##! \private
         self.dateFormat    = "%Y-%m-%d %H:%M:%S"
+        ##! \private
         self.volumeTitle   = "volume"
 
-        # Price object main properties 
+        # Price object main properties
+        ##! \private 
         self.baseTimeframe = None
         # Local market time zone
+        ## ### Dataset time zone   
+        # **Type** : int \n 
+        # **Defaut value** : 0 \n 
+        # **Description** : \n 
+        # Time zone at which the data have been aggregated. 
+        # UTC+...
         self.dataTimeZone      = 0 # UTC+...
+        ## ### Exchange market time zone    
+        # **Type** : int \n 
+        # **Defaut value** : 0 \n 
+        # **Description** : \n 
+        # Exchange market time zone.  
+        # UTC+...
         self.marketTimeZone    = 0 # UTC+...
         # Hours defined in the local market time zone 
+        ## ### Market opening hour    
+        # **Type** : string \n 
+        # **Defaut value** : "00:00" \n 
+        # **Description** : \n 
+        # Market opening hour in the local market time zone.
+        # The variable format should follow : "HH:MM"
         self.marketOpeningHour = "00:00"
+        ## ### Market lunch hour    
+        # **Type** : string \n 
+        # **Defaut value** : None \n 
+        # **Description** : \n 
+        # Lunch period in the local market hour. 
+        # The variable format should follow : "HH:MM-HH:MM". If no lunch, let 
+        # this variable to None. 
         self.marketLunch       = None    # The format of this variable is : "HH:MM-HH:MM"
+        ## ### Market breaks list    
+        # **Type** : list(string) \n 
+        # **Defaut value** : list() \n 
+        # **Description** : \n 
+        # List of the different breaks during a day.  
+        # The variable format should follow : ["HH:MM-HH:MM", "...", ... ]. 
+        # If there are no breaks within the day, let this variable as an empty list. 
         self.marketBreakList   = list()  # The format of this variable is : ["HH:MM-HH:MM", "..."]
+        ## ### Market closing hour    
+        # **Type** : string \n 
+        # **Defaut value** : "24:00" \n 
+        # **Description** : \n 
+        # Market closing hour in the local market time zone.
+        # The variable format should follow : "HH:MM".
+        # Note : If the market never close, the close hour should be : "24:00"
         self.marketClosingHour = "24:00"
         # Days of week where the market is open 
+        ## ### Days of week open market    
+        # **Type** : list(integer) \n 
+        # **Defaut value** : [0, 1, 2, 3, 4, 5, 6] \n 
+        # **Description** : \n 
+        # List of days in the week the market is usually open. 
+        # 0 : Monday -> 6 : Sunday
         self.daysOfWeek        = [0, 1, 2, 3, 4, 5, 6] # [#day of the week from 0 to 6]
         # List of dates where the market can be closed (vacancies ...)
         # To be done ..... 
+        ## ### Market vacations list    
+        # **Type** : list() \n 
+        # **Defaut value** : list()\n 
+        # **Description** : \n 
+        # List of vacations all along the simulation time. Note : this variable 
+        # is not working yet. 
         self.vacations         = list()
 
         # Initial, file structure 
+        ## ### Data list     
+        # **Type** : list(float) \n 
+        # **Defaut value** : list() \n 
+        # **Description** : \n 
+        # Open ask data list.  
         self.askOpen  = list()
+        ## ### Data list     
+        # **Type** : list(float) \n 
+        # **Defaut value** : list() \n 
+        # **Description** : \n 
+        # High ask data list.  
         self.askHigh  = list()
+        ## ### Data list     
+        # **Type** : list(float) \n 
+        # **Defaut value** : list() \n 
+        # **Description** : \n 
+        # Low ask data list.  
         self.askLow   = list() 
+        ## ### Data list     
+        # **Type** : list(float) \n 
+        # **Defaut value** : list() \n 
+        # **Description** : \n 
+        # Close ask data list.  
         self.askClose = list()
 
+        ## ### Data list     
+        # **Type** : list(float) \n 
+        # **Defaut value** : list() \n 
+        # **Description** : \n 
+        # Open bid data list.  
         self.bidOpen  = list()
+        ## ### Data list     
+        # **Type** : list(float) \n 
+        # **Defaut value** : list() \n 
+        # **Description** : \n 
+        # High bid data list.  
         self.bidHigh  = list()
+        ## ### Data list     
+        # **Type** : list(float) \n 
+        # **Defaut value** : list() \n 
+        # **Description** : \n 
+        # Low bid data list.  
         self.bidLow   = list() 
+        ## ### Data list     
+        # **Type** : list(float) \n 
+        # **Defaut value** : list() \n 
+        # **Description** : \n 
+        # Close bid data list.  
         self.bidClose = list()
 
+        ## ### Data list     
+        # **Type** : list(datetime) \n 
+        # **Defaut value** : list() \n 
+        # **Description** : \n 
+        # Date list.  
         self.date     = list() 
+        
+        ## ### Data list     
+        # **Type** : list(float) \n 
+        # **Defaut value** : list() \n 
+        # **Description** : \n 
+        # Volume list.  
         self.volume   = list()
 
         # Other important lists 
+        ## ### Data list     
+        # **Type** : list(string) \n 
+        # **Defaut value** : list() \n 
+        # **Description** : \n 
+        # Market status list. It can be : "closed" or "open" 
         self.marketStatus = list()    # Can be : "closed", "open"
 
         # Other informations 
+        ## ### Is re-sampled data ?      
+        # **Type** : boolean \n 
+        # **Defaut value** : False \n 
+        # **Description** : \n 
+        # False if original data. True is sampled from sub resolution data   
         self.sampled = False # False if original data. True is sampled from sub resolution data 
+        ##! \private ### Data list     
+        # **Type** : list(integer) \n 
+        # **Defaut value** : list() \n 
+        # **Description** : \n 
+        # Index list.  
         self.index   = list()
 
     def createCopy(self) : 
+        """!  
+        **Description :** 
+            
+            Returns a deep copy of current PRICE object
+        
+        **Parameters :** 
+            
+            None 
+        
+        **Returns :** 
+            
+            PRICE object 
+        """
         return copy.deepcopy(self)
 
     def setColumnsTitle(self, 
@@ -102,8 +303,49 @@ class PRICE :
                         splitDaysHours    = False, # Case where days and hours infos are not on the same column 
                         days              = None, 
                         hours             = None) : 
-        """  
-        This function allows to define the columns names in the file. 
+        """!  
+        **Description :** 
+            
+            This function allows to define the columns names in the file.  
+        
+        **Parameters :** 
+            
+            - askOpen [str] = None : 
+                ask open datafile column name 
+            - askHigh [str] = None : 
+                ask high datafile column name 
+            - askLow [str] = None : 
+                ask low datafile column name 
+            - askClose [str] = None : 
+                ask close datafile column name 
+            - bidOpen [str] = None : 
+                bid open datafile column name 
+            - bidHigh [str] = None : 
+                bid high datafile column name 
+            - bidLow [str] = None : 
+                bid low datafile column name 
+            - bidClose [str] = None : 
+                bid close datafile column name 
+            - date [str] = None : 
+                date datafile column name. Only if days and hours are specified in 
+                the same column. Example : 2021-03-18 23:57:12 
+            - dateFormat [str] = None : 
+                date format associated to the date strings in the datafile. 
+                See more here : https://docs.python.org/3.6/library/datetime.html#strftime-and-strptime-behavior 
+                Note : Even if days and hours are separated, the date format should be defined as if they were 
+                only separated by a space. 
+            - volume [str] = None : 
+                volume datafile column name 
+            - splitDaysHours [bool] = False :
+                put True if days and hours are not in the same column in the datafile. 
+            - days [str] = None : 
+                days datafile column name. Only if splitDaysHours = True 
+            - hours [str] = None : 
+                hours datafile column name. Only if splitDaysHours = True
+        
+        **Returns :** 
+            
+            None 
         """
         if askOpen is not None : 
             self.askOpen_ = askOpen 
@@ -613,7 +855,7 @@ class PRICE :
         self.bidOpen = bidOpen 
         self.bidHigh = bidHigh 
         self.bidLow  = bidLow 
-        self.bidCLose= bidClose 
+        self.bidClose= bidClose 
 
         #print (date_[6])
 
