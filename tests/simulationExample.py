@@ -199,5 +199,5 @@ RESULTS STEP
 # We write the results in a csv file 
 sim.writeClosedPositionsFile(index = 0)
 # We plot the equity curve 
-sim.showEquityCurve(index = [0])
+fig, ax = sim.showEquityCurve(index = [0])
 

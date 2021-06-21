@@ -40,6 +40,8 @@ class PORTFOLIO :
     Q26 - QuanTester module - PORTFOLIO object. 
     ===============================================================
     ### Description :
+        
+        This class is dedicated in initializing a trading PORTFOLIO. 
     
     ### Examples :
     

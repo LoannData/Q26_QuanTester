@@ -38,7 +38,11 @@ class SIMULATION(ANALYSIS, WRITER) :
     Q26 - QuanTester module - SIMULATION(ANALYSIS, WRITER) object. 
     ===============================================================
     ### Description :
-    
+        
+        Main class of the Q26 QuanTester module. This object is dedicated to 
+        initialize the simulation parameters and output the simulation 
+        results. 
+        
     ### Examples :
     
     ### Planned developments :

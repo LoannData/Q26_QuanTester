@@ -172,7 +172,7 @@ Note that in this step, we prepare the same number of strategies and initial
 portfolio. A strategy and a portfolio interacting together have the same index 
 in the list. 
 """
-N = 100  # Number of strategies 
+N = 10  # Number of strategies 
 
 stratPath = "./"
 stratFile = "strategyExample"
@@ -271,7 +271,7 @@ def main() :
     
 if __name__ == "__main__" : 
     main()
-    sim.showEquityCurve(index = list(np.linspace(0, N-1, num = N, dtype = int)))
+    fig, ax = sim.showEquityCurve(index = list(np.linspace(0, N-1, num = N-1, dtype = int)), xTime = True)
 
 """ 
 ===============================================================================
@@ -284,7 +284,7 @@ going to the next time step.
 # # Run of the simulation 
 # sim.run(mode = "sequential")
 # # We plot the equity curve 
-# sim.showEquityCurve(index = list(np.linspace(0, N-1, num = N, dtype = int)))
+# fig, ax = sim.showEquityCurve(index = list(np.linspace(0, N-1, num = N-1, dtype = int)), xTime = True)
 
 
 
