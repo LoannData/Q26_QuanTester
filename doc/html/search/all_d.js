@@ -12,7 +12,8 @@ var searchData=
   ['precision_92',['precision',['../classquanTest_1_1symbol_1_1SYMBOL.html#ab23e7a0f6c1599a6a1db0e536c93284b',1,'quanTest::symbol::SYMBOL']]],
   ['price_93',['PRICE',['../classquanTest_1_1data_1_1PRICE.html',1,'quanTest::data']]],
   ['price_5ftable_94',['PRICE_TABLE',['../classquanTest_1_1data_1_1PRICE__TABLE.html',1,'quanTest::data']]],
-  ['pricetable_95',['priceTable',['../classquanTest_1_1simulation_1_1SIMULATION.html#a2755b4003909120d87afa1cafad7ac26',1,'quanTest::simulation::SIMULATION']]],
-  ['profit_96',['profit',['../classquanTest_1_1position_1_1POSITION.html#a5d3b9b7e9d21bd508b517647e34065d8',1,'quanTest::position::POSITION']]],
-  ['profitcalculationmethod_97',['profitCalculationMethod',['../classquanTest_1_1symbol_1_1SYMBOL.html#a7edd27c00759e3e23e975ce7e7663c0a',1,'quanTest::symbol::SYMBOL']]]
+  ['pricelist_95',['priceList',['../classquanTest_1_1data_1_1PRICE__TABLE.html#af516ccc032c877b5c1b4efcddd4c4325',1,'quanTest::data::PRICE_TABLE']]],
+  ['pricetable_96',['priceTable',['../classquanTest_1_1simulation_1_1SIMULATION.html#a2755b4003909120d87afa1cafad7ac26',1,'quanTest::simulation::SIMULATION']]],
+  ['profit_97',['profit',['../classquanTest_1_1position_1_1POSITION.html#a5d3b9b7e9d21bd508b517647e34065d8',1,'quanTest::position::POSITION']]],
+  ['profitcalculationmethod_98',['profitCalculationMethod',['../classquanTest_1_1symbol_1_1SYMBOL.html#a7edd27c00759e3e23e975ce7e7663c0a',1,'quanTest::symbol::SYMBOL']]]
 ];

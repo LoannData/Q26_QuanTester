@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['usedmargin_252',['usedMargin',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#ae2ae7e59ca669e409d7ee9ea85d4d39b',1,'quanTest::portfolio::PORTFOLIO']]]
+  ['usedmargin_262',['usedMargin',['../classquanTest_1_1portfolio_1_1PORTFOLIO.html#ae2ae7e59ca669e409d7ee9ea85d4d39b',1,'quanTest::portfolio::PORTFOLIO']]]
 ];

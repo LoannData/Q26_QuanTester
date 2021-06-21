@@ -374,10 +374,22 @@ class PRICE :
             self.date_ = "split---"+days+"---"+hours
     
     def read(self, path) : 
-        """ 
-        Function that reads the csv file
+        """!  
+        **Description :** 
+            
+            Reads the historical dataset, given its path. The dataset have to 
+            be a csv file. 
+        
+        **Parameters :** 
+            
+            path [str] : 
+                The dataset path+name
+        
+        **Returns :** 
+            
+            None
         """
-
+        
         df = pd.read_csv(path)
 
         try : 
@@ -435,9 +447,20 @@ class PRICE :
     
     def setBaseTimeframe(self, 
                          timeframe = dt.timedelta(minutes = 1)) : 
-        """ 
-        Function allowing to define the base timeframe of the PRICE object.
+        """!  
+        **Description :** 
+            
+            Function allowing to define the base timeframe of the PRICE object.
+        
+        **Parameters :** 
+            
+            - timeframe [datetime.timedelta] = timedelta(minutes = 1) 
+        
+        **Returns :** 
+            
+            None 
         """
+        
         if type(timeframe) == type(dt.timedelta(minutes = 1)) : 
             self.baseTimeframe = timeframe 
         else : 
@@ -445,14 +468,25 @@ class PRICE :
     
     def fillMissingData(self, 
                         model = "constant") : 
-        """ 
-        Function that allows to fill the missing data so that it exists a price data candle for 
-        every time step from the beginning to the end of the dataframe. 
-        Different filling models can be used : 
-            - "constant" : This model just fill the candles using the last knew price (the standard model, to be used when data quality is good)
-            - other models to be defined ... 
+        """!  
+        **Description :** 
+            
+            Function that allows to fill the missing data so that it exists a price data candle for 
+            every time step from the beginning to the end of the dataframe. 
+            Note : More models will be implemented in a close future...
 
+        
+        **Parameters :** 
+            
+            - model [str] = "constant" : 
+                - "constant" : Fill the candles using the last known price 
+                               (the standard model, to be used when data quality is good) 
+        
+        **Returns :** 
+            
+            None 
         """
+
         if not self.sampled :
 
             filledAskOpen  = list() 
@@ -519,29 +553,76 @@ class PRICE :
 
     def shiftMarketTime(self, 
                         timeshift = 0) : 
-        """ 
-        Function that allows to shift the market hours to make it fit with 
-        UTC+0 time if this is not already the case 
+        """!  
+        **Description :** 
+            
+            Function that allows to shift the market hours to make it fit with 
+            UTC+0 time if this is not already the case. 
+        
+        **Parameters :** 
+            
+            - timeshift [int] = 0 : 
+                timeshift in hours
+        
+        **Returns :** 
+            
+            None 
         """
         self.date = list(np.array(self.date) + dt.timedelta(hours = timeshift)) 
     
     def setMarketTimeZone(self, 
                           timezone = 0) : 
-        """ 
-        Function that allows to define the price time data time zone 
-        according to UTC+0. 
+        """!  
+        **Description :** 
+            
+            Allows to define the price time data time zone 
+            according to UTC+0. 
+        
+        **Parameters :** 
+            
+            - timezone [int] = 0 : 
+                market time zone in hours
+        
+        **Returns :** 
+            
+            None 
         """
+
         self.marketTimeZone = timezone 
     
     def setDataTimeZone(self, 
                         timezone = 0) : 
-        """ 
-        Function that allows to define the timezone in which the data is printed 
+        """!  
+        **Description :** 
+            
+            Function that allows to define the timezone in which the data is printed 
+        
+        **Parameters :** 
+            
+            - timezone [int] = 0 : 
+                timezone in which the data will be printed
+        
+        **Returns :** 
+            
+            None 
         """
         self.dataTimeZone = timezone
 
     def setMarketState(self) : 
+        """!  
+        **Description :** 
+            
+            Once defined the time zones, the open/close/breaks hours, this function 
+            fill the marketState list with "open" or "closed" for every candle. 
         
+        **Parameters :** 
+            
+            None
+        
+        **Returns :** 
+            
+            None 
+        """
 
         for i in range(len(self.date)) : 
 
@@ -591,6 +672,19 @@ class PRICE :
                 self.marketStatus.append(locMarketState) 
             
     def setBaseIndex(self) : 
+        """!  \private
+        **Description :** 
+            
+            None
+        
+        **Parameters :** 
+            
+            None
+        
+        **Returns :** 
+            
+            None 
+        """
 
         #if not self.sampled :
 
@@ -610,6 +704,19 @@ class PRICE :
     def timeDaySampler(self, 
                        baseTimeframe, 
                        timeframe) :
+        """!  \private
+        **Description :** 
+            
+            None
+        
+        **Parameters :** 
+            
+            None
+        
+        **Returns :** 
+            
+            None 
+        """
 
         marketOpeningHour = self.marketOpeningHour 
         marketClosingHour = self.marketClosingHour 
@@ -731,6 +838,27 @@ class PRICE :
         return candlesList
 
     def resampleData(self, newTimeFrame, name = None) : 
+        """!  
+        **Description :** 
+            
+            This function allows to re-sample candle data following the typical sampling method 
+            used by trading platforms. Once resampled, the PRICE object obtains the status 
+            sampled = True. 
+        
+        **Parameters :** 
+            
+            - newTimeFrame [str] : 
+                New sampling timeframe in format : "HH:MM". The new sampling timeframe has to be 
+                time larger than the before sampling timeframe. 
+            - name [str] = None : 
+                To make the data readable in the standard way by the STRATEGY classes 
+                via the function .getHistoricalData, the name of the sampled data should be 
+                the exact same as the corresponding SYMBOL name and the base dataset name. 
+        
+        **Returns :** 
+            
+            None 
+        """
 
         # 0. We transform the base timeframe attribute into a readable format 
         baseTf_lst = str(self.baseTimeframe).split(":") 
@@ -882,12 +1010,53 @@ class PRICE :
         
 
 class PRICE_TABLE : 
+    """!
+    ===============================================================
+    Q26 - QuanTester module - PRICE_TABLE object. 
+    ===============================================================
+    ### Description :
+    
+    ### Examples :
+    
+    ### Planned developments :
+    
+    ### Known bugs :
+    
+    \dontinclude[
+    Do do list : 
+        - 
+    ] 
+        
+
+    """ 
 
     def __init__(self, priceList) : 
+        ## ### Dataset name  
+        # **Type** : list(class PRICE) \n 
+        # **Description** : \n 
+        # List of PRICE objects 
         self.priceList = priceList  # Here price list is a list of the objects PRICE to be synchronized 
+        ## ### PRICEs synchronization state  
+        # **Type** : boolean \n 
+        # **Defaut value** : False \n 
+        # **Description** : \n 
+        # Synchronization state of the base PRICE objects 
         self.synchronized = False 
     
     def synchronize(self) : 
+        """!  
+        **Description :** 
+            
+            This function allows to synchronize the base data PRICEs. 
+        
+        **Parameters :** 
+            
+            None
+        
+        **Returns :** 
+            
+            None 
+        """
 
         # 1. We cut the useless edges of the data 
         lateGeneralBeginning = self.priceList[0].date[0]
@@ -911,6 +1080,19 @@ class PRICE_TABLE :
         self.synchronized = True 
     
     def iloc(self, index, exceptSampled = True) : 
+        """!  \private
+        **Description :** 
+            
+            None
+        
+        **Parameters :** 
+            
+            None
+        
+        **Returns :** 
+            
+            None 
+        """
         table = dict() 
         for price in self.priceList : 
             
@@ -953,6 +1135,19 @@ class PRICE_TABLE :
         return table 
     
     def len(self) : 
+        """!  \private
+        **Description :** 
+            
+            None
+        
+        **Parameters :** 
+            
+            None
+        
+        **Returns :** 
+            
+            None 
+        """
 
         if self.synchronized : 
 
@@ -965,6 +1160,19 @@ class PRICE_TABLE :
 
 
     def array(self, name, indexIni, indexEnd, format = "dictionnary") : 
+        """!  \private
+        **Description :** 
+            
+            None
+        
+        **Parameters :** 
+            
+            None
+        
+        **Returns :** 
+            
+            None 
+        """
         price = None 
         for i in range(len(self.priceList)) : 
             if self.priceList[i].name == name : 
@@ -1016,6 +1224,19 @@ class PRICE_TABLE :
             return df 
 
     def isSampled(self, priceName) : 
+        """!  \private
+        **Description :** 
+            
+            None
+        
+        **Parameters :** 
+            
+            None
+        
+        **Returns :** 
+            
+            None 
+        """
         locIndex = None 
         for i in range(len(self.priceList)) : 
             price = self.priceList[i]
