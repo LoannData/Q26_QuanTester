@@ -30,7 +30,9 @@ import numpy as np
 import copy 
 from quanTest import utils 
 
-class PRICE : 
+from quanTest.models.spread import SPREAD
+
+class PRICE(SPREAD) : 
     """!
     ===============================================================
     Q26 - QuanTester module - PRICE object. 
@@ -1007,6 +1009,8 @@ class PRICE :
             self.name = name+"_"+str(int(newTimeFrame.split(":")[0])*60 + int(newTimeFrame.split(":")[1])) 
         else : 
             self.name += "_resampled"+str(int(newTimeFrame.split(":")[0])*60 + int(newTimeFrame.split(":")[1])) 
+    
+
         
 
 class PRICE_TABLE : 

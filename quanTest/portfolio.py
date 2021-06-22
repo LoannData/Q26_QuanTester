@@ -33,8 +33,10 @@ import quanTest.financialTools as financialTools
 from quanTest.order import ORDER
 from quanTest.position import POSITION
 
+from quanTest.models.slippage import SLIPPAGE
 
-class PORTFOLIO : 
+
+class PORTFOLIO(SLIPPAGE) : 
     """!
     ===============================================================
     Q26 - QuanTester module - PORTFOLIO object. 
@@ -321,6 +323,10 @@ class PORTFOLIO :
         # simulation. 
         self.verbose                                = True 
         
+        # Models 
+        ##! \private 
+        self.slippageMdl                            = None 
+        
         return 
     
 
@@ -352,7 +358,7 @@ class PORTFOLIO :
                    stoploss   = None,          
                    takeprofit = None, 
                    lmtPrice   = None, 
-                   auxPrice   = None ) : 
+                   auxPrice   = None) : 
         """!
         **Description :** 
             
@@ -913,6 +919,8 @@ class PORTFOLIO :
             type = symbol.marginRequestMethod 
             contractSize = symbol.contractSize
             openPrice    = symbol.askprice if order.action == "long" else symbol.bidprice
+            openPrice    = self.generateSlippage(openPrice) # Slippage model 
+             
             tickPrice    = None 
             tickSize     = None 
             leverage     = self.leverage
@@ -1010,6 +1018,7 @@ class PORTFOLIO :
                     order.executed = True
 
                     self.openPositions[openPositionIndex].possibleClosePrice = symbol.bidprice if order.action == "short" else symbol.askprice
+                    self.openPositions[openPositionIndex].possibleClosePrice    = self.generateSlippage(self.openPositions[openPositionIndex].possibleClosePrice) # Slippage model 
                     self.openPositions[openPositionIndex].possibleCloseDate  = symbol.time 
                     absoluteProfit = self.openPositions[openPositionIndex].possibleClosePrice*order.volume*symbol.contractSize - self.openPositions[openPositionIndex].brokerLoan - self.openPositions[openPositionIndex].requestMargin
                     absoluteProfit_ = absoluteProfit if order.action == "short" else - absoluteProfit 

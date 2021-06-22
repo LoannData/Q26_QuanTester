@@ -55,7 +55,6 @@ class STRATEGY :
         #  Other options 
         self.showInfo = True 
         
-        
         return 
     
     def run(self, client) : 
