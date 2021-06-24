@@ -38,7 +38,10 @@ class STRATEGY :
         #        have to be the the exact same as the ones defined in 
         #        the simulation header file 
         self.symbolName = "EUR.USD"
-        self.timeframe = 60
+        self.timeframe = 5
+        
+        # Volume factor 
+        self.volumeFactor = 1.
         
         
         # Moving average parameters 
@@ -96,9 +99,9 @@ class STRATEGY :
                     orderList = client.placeOrder(self.symbolName,
                                                   action     = "long", 
                                                   orderType  = "MKT", 
-                                                  volume     = 0.1, 
-                                                  stoploss   = 0., 
-                                                  takeprofit = 100.)
+                                                  volume     = 0.1*self.volumeFactor, 
+                                                  stoploss   = 0.5, 
+                                                  takeprofit = 2.)
                     
                     if orderList[0] is not False : 
                         self.placedOrder = orderList[0] 
@@ -112,9 +115,9 @@ class STRATEGY :
                     orderList = client.placeOrder(self.symbolName,
                                                      action     = "short", 
                                                      orderType  = "MKT", 
-                                                     volume     = 0.1, 
-                                                     stoploss   = 100., 
-                                                     takeprofit = 0.)
+                                                     volume     = 0.1*self.volumeFactor, 
+                                                     stoploss   = 2., 
+                                                     takeprofit = 0.5)
                     if orderList[0] is not False : 
                         self.placedOrder = orderList[0] 
                         self.activePosition = "short"
@@ -149,6 +152,7 @@ class STRATEGY :
             if self.dataSet1 is not None:
                 print ("The last requested data :")
                 print (pd.DataFrame(self.dataSet1))
+                print (pd.DataFrame(self.dataSet2))
                 print ("The last known moving average values : ")
                 print ("SMA(10): ",self.SMA1.value[-1])
                 print ("SMA(30): ",self.SMA2.value[-1])
@@ -156,8 +160,24 @@ class STRATEGY :
             
             try : 
                 fig = plt.figure() 
-                plt.plot(self.dataSet1.get("date")[-10:], self.SMA1.value[-10:], c = "blue", lw = 2, label = "SMA "+str(self.SMA1_period)) 
-                plt.plot(self.dataSet2.get("date")[-10:], self.SMA2.value[-10:], c = "red", lw = 2, label = "SMA "+str(self.SMA2_period))
+                
+                for i in range(len(self.dataSet2.get("date"))) : 
+                    
+                    if self.dataSet2.get("askclose")[i] > self.dataSet2.get("askopen")[i] : 
+                        candleColor = "blue" 
+                    else : 
+                        candleColor = "red"
+                        
+                    plt.plot([self.dataSet2.get("date")[i], self.dataSet2.get("date")[i]], 
+                             [self.dataSet2.get("asklow")[i], self.dataSet2.get("askhigh")[i]], 
+                             lw = 1, c = "black") 
+                    
+                    plt.plot([self.dataSet2.get("date")[i], self.dataSet2.get("date")[i]], 
+                             [self.dataSet2.get("askopen")[i], self.dataSet2.get("askclose")[i]], 
+                             lw = 3, c = candleColor) 
+                        
+                plt.plot(self.dataSet1.get("date")[-30:], self.SMA1.value[-30:], c = "blue", lw = 2, label = "SMA "+str(self.SMA1_period)) 
+                plt.plot(self.dataSet2.get("date")[-30:], self.SMA2.value[-30:], c = "red", lw = 2, label = "SMA "+str(self.SMA2_period))
                 plt.legend()
                 plt.xticks(rotation=45)
                 plt.ylabel("Price")

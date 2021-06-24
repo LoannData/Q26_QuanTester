@@ -1326,7 +1326,7 @@ class PORTFOLIO(SLIPPAGE) :
 
 
 
-            if (type(dateIni) == dt.datetime(2020, 1, 10, 10, 10) and type(dateIni) == type(dateEnd)) : 
+            if (type(dateIni) == type(dt.datetime(2020, 1, 10, 10, 10)) and type(dateIni) == type(dateEnd)) : 
                 df = df.set_index("date") 
                 df = df[dateIni : dateEnd]
             if (type(dateIni) == int and type(dateIni) == type(dateEnd)) : 
