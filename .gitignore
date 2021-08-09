@@ -1,0 +1,5 @@
+dist/ 
+build/ 
+*.pyc 
+*-info
+*/__pycache__/*
