@@ -1,0 +1,22 @@
+import setuptools
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+
+setuptools.setup(
+     name='q26_quanTester',  
+     version='0.1',
+     packages=setuptools.find_packages(exclude=['tests*']),
+     author="Loann Brahimi",
+     author_email="loann.brahimi@data-sciences.io",
+     description="A python package for trading simulation",
+     long_description=long_description,
+     long_description_content_type="text/markdown",
+     url="https://github.com/LoannData/Q26_QuanTester.git",
+     classifiers=[
+         "Programming Language :: Python :: 3",
+         "License :: OSI Approved :: MIT License",
+         "Operating System :: OS Independent",
+     ],
+ )

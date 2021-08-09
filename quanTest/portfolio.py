@@ -1267,7 +1267,12 @@ class PORTFOLIO(SLIPPAGE) :
 
         self.historicalDataPrice = historicalData
 
-    def getHistoricalData(self, symbolName, dateIni, dateEnd, timeframe, onlyOpen = True) : 
+    def getHistoricalData(self, 
+                          symbolName, 
+                          dateIni, 
+                          dateEnd, 
+                          timeframe, 
+                          onlyOpen = True) : 
         """!
         **Description :** 
             

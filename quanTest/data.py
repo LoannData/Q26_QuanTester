@@ -508,7 +508,6 @@ class PRICE(SPREAD) :
 
             if model == "constant" : 
                 
-
                 iniTime = self.date[0] 
                 endTime = self.date[-1] 
 
