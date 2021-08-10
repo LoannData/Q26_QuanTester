@@ -2,7 +2,7 @@
 [2]: https://www.q26.io/data/q26_backtest_system/doc/html/
 [3]: https://github.com/LoannData/Q26_QuanTester/wiki/Hands-on-:-A-simple-backtest
 
-## Q26_BacktestSystem
+## Q26_QuanTester
 
 Q26 Backtest System is a financial investment simulation tool dedicated for algorithmic traders developped in Python 3. 
 
