@@ -1317,7 +1317,7 @@ class PORTFOLIO(SLIPPAGE) :
                 
         """ 
         # Case where the timeframe is provided as 0 
-        if timeframe == 0 : 
+        if timeframe == 0 or timeframe == self.historicalDataTimeframe: 
             pass 
         else : 
             symbolName += "_"+str(timeframe)
@@ -1348,6 +1348,8 @@ class PORTFOLIO(SLIPPAGE) :
         else : 
 
             historicalData = self.historicalDataPrice.get(symbolName)
+
+            #print("Historical data = ",self.historicalDataPrice)
 
             # !!! This step have to be optimized !!! (too slow)
             historicalData_ = dict()

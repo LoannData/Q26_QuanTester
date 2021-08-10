@@ -381,9 +381,13 @@ class SIMULATION(ANALYSIS, WRITER) :
         if mode == "linear" : 
             
             currentPriceTable = self.priceTable.iloc(index)
+            # print ("index = ",index)
+            # print (self.priceTable)
 
             for key in list(self.portfolio[idx].symbols.keys()) : 
                 symbol = self.portfolio[idx].symbols.get(key) 
+                # print (self.portfolio[idx].symbols, key)
+                # print (currentPriceTable.get(key))
                 for skey in list(currentPriceTable.get(key).keys()) : 
                     if skey != "market status" : 
                         setattr(symbol, skey, currentPriceTable.get(key).get(skey))

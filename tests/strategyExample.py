@@ -38,7 +38,7 @@ class STRATEGY :
         #        have to be the the exact same as the ones defined in 
         #        the simulation header file 
         self.symbolName = "EUR.USD"
-        self.timeframe = 5
+        self.timeframe = 1
         
         # Volume factor 
         self.volumeFactor = 1.

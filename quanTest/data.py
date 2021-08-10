@@ -1135,6 +1135,7 @@ class PRICE_TABLE :
                         "volume"        : price.volume[index], 
                         "market status" : price.marketStatus[index] 
                     }})
+        #print ("TABLE = ",table)
         return table 
     
     def len(self) : 

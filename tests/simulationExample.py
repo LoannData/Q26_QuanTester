@@ -35,8 +35,8 @@ import pprint
 import copy 
 
 # Relative or absolute path to Q26_BacktestSystem folder
-backTesterModulePath = "../"            
-sys.path.append(backTesterModulePath)
+# backTesterModulePath = "../"            
+# sys.path.append(backTesterModulePath)
 
 # Q26 BacktestSystem class importations 
 from quanTest.symbol     import SYMBOL
