@@ -34,6 +34,11 @@ Download the code by cloning the git repository using
 $ git clone https://github.com/LoannData/Q26_BacktestSystem.git
 ```
 
+or install the latest stable version using
+``` 
+pip install q26-quanTester
+```
+
 ### Hands-on 
 
 [Here][3] you can find a tutorial which shows how to hands-on the Q26 Backtest system
