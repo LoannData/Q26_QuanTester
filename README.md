@@ -1,6 +1,6 @@
 [1]: https://www.q26.io
 [2]: https://www.q26.io/data/q26_backtest_system/doc/html/
-[3]: https://github.com/LoannData/Q26_BacktestSystem/wiki/Hands-on-:-A-simple-backtest 
+[3]: https://github.com/LoannData/Q26_QuanTester/wiki/Hands-on
 
 ## Q26_BacktestSystem
 
