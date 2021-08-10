@@ -31,7 +31,7 @@ To get more informations about the Backtest System and the other products of Q26
 
 Download the code by cloning the git repository using 
 ```
-$ https://github.com/LoannData/Q26_QuanTester.git
+git clone https://github.com/LoannData/Q26_QuanTester.git
 ```
 
 or install the latest stable version using
