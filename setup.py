@@ -6,8 +6,9 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
      name='q26_quanTester',  
-     version='0.1',
+     version='0.1.1',
      packages=setuptools.find_packages(exclude=['tests*']),
+     #install_requires=['numpy', 'pandas', 'matplotlib', 'importlib'],
      author="Loann Brahimi",
      author_email="loann.brahimi@data-sciences.io",
      description="A python package for trading simulation",
@@ -19,4 +20,5 @@ setuptools.setup(
          "License :: OSI Approved :: MIT License",
          "Operating System :: OS Independent",
      ],
+     python_requires=">=3.6",
  )
