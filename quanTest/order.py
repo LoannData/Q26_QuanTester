@@ -178,7 +178,21 @@ class ORDER :
     #############################################################
     # OTHER FUNCTIONS
     #############################################################
-    
+    def read(self) : 
+        
+        ord_ = dict() 
+        ord_.update({
+            "symbol name"               : self.symbolName, 
+            "order ID"                  : self.orderID, 
+            "parent ID"                 : self.parentID, 
+            "action"                    : self.action, 
+            "order type"                : self.orderType, 
+            "volume"                    : self.volume, 
+            "limit price"               : self.lmtPrice, 
+            "cancel date"               : self.cancelDate, 
+            })
+        
+        return ord_ 
 
          
 

@@ -201,6 +201,53 @@ class SYMBOL :
 
         return 
     
+    def read(self, kind): 
+        
+        
+        if kind == "init" : 
+        
+            sym_ = dict() 
+            sym_.update({
+                "symbol name"              : self.symbolName, 
+                "contract size"            : self.contractSize, 
+                "margin currency"          : self.marginCurrency, 
+                "profit calculation method": self.profitCalculationMethod, 
+                "margin request method"    : self.marginRequestMethod, 
+                "margin percentage"        : self.marginPercentage, 
+                "execution"                : self.execution, 
+                "minimal volume"           : self.minimalVolume, 
+                "maximal volume"           : self.maximalVolume, 
+                "volume step"              : self.volumeStep, 
+                "precision"                : self.precision, 
+                "exchange type"            : self.exchangeType, 
+                "exchange long"            : self.exchangeLong, 
+                "exchange short"           : self.exchangeShort
+                })
+            
+            return sym_ 
+        
+        elif kind == "run" : 
+            
+            sym_ = dict() 
+            sym_.update({
+                "symbol name"              : self.symbolName,
+                "date"                     : str(self.time),
+                "market state"             : self.marketState,
+                "askprice"                 : self.askprice, 
+                "bidprice"                 : self.bidprice, 
+                "askopen"                  : self.askopen, 
+                "askhigh"                  : self.askhigh, 
+                "asklow"                   : self.asklow, 
+                "askclose"                 : self.askclose, 
+                "bidopen"                  : self.bidopen, 
+                "bidhigh"                  : self.bidhigh, 
+                "bidlow"                   : self.bidlow, 
+                "bidclose"                 : self.bidclose, 
+                "volume"                   : self.volume 
+                })
+            
+            return sym_
+    
     def setCurrentMarketState(
         self, 
         state

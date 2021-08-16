@@ -27,6 +27,7 @@ Q26 - QuanTester Python File
 import sys, os 
 import importlib
 import datetime as dt 
+import time 
 
 from quanTest.analysis import ANALYSIS  
 from quanTest.writer import WRITER 
@@ -154,8 +155,7 @@ class SIMULATION(ANALYSIS, WRITER) :
         # If True, the simulation will print a lot of debug informations. \n
         # Warning : This parameter is not fully functionnal yet. 
         self.verbose  = False 
-        for i in range(len(self.portfolio)) : 
-            self.portfolio[i].verbose = self.verbose 
+
         ## ### Log frequency 
         # **Type** : integer \n 
         # **Defaut value** : 100 \n 
@@ -164,6 +164,8 @@ class SIMULATION(ANALYSIS, WRITER) :
         # the code will print the simulation advancement and run the function .show() in 
         # each strategy.STRAGEY() class. 
         self.logEvery = 100 
+        
+
 
         return 
 
@@ -172,6 +174,123 @@ class SIMULATION(ANALYSIS, WRITER) :
     # BACKTEST OPERATIONS
     ###############################################################
     ]""" 
+    
+    def simulation_header(self): 
+        """! \private
+        **Description :** 
+            
+            Function that returns a dictionnary object that contains all the initial simulation 
+            parameters.
+        
+        **Parameters :** 
+            
+            None 
+        
+        **Returns :** 
+            
+            a dictionnary
+        """
+        sim = dict()
+        sim.update({
+            "start index"        : self.startIndex, 
+            "stop index"         : self.stopIndex, 
+            "sub-loop model"     : self.subLoopModel, 
+            "max hst. data size" : self.maxHstDataSize, 
+            "verbose"            : self.verbose, 
+            "logstep freq."      : self.logEvery
+            })
+        return sim
+    
+    def portfolio_header(self, i): 
+        """! \private
+        **Description :** 
+            
+            Function that returns a dictionnary object that contains all the initial portfolio 
+            parameters.
+        
+        **Parameters :** 
+            
+            - i [int] : Index of the current portfolio.
+        
+        **Returns :** 
+            
+            a dictionnary
+        """
+        port = dict() 
+        port.update({
+            "symbol names"                        : [{x : self.portfolio[i].symbols[x].read("init")} for x in list(self.portfolio[i].symbols.keys())],# list(self.portfolio[i].symbols.keys()),
+            "initial deposit"                     : self.portfolio[i].initialDeposit, 
+            "initial available margin"            : self.portfolio[i].initialAvailableMargin, 
+            "leverage"                            : self.portfolio[i].leverage, 
+            "currency"                            : self.portfolio[i].currency, 
+            "positions constrains"                : self.portfolio[i].positions, 
+            "margin call treeshold"               : self.portfolio[i].marginCallTreeshold, 
+            "margin minimum"                      : self.portfolio[i].marginMinimum, 
+            "minimum balance"                     : self.portfolio[i].minimumBalance, 
+            "maximum profit"                      : self.portfolio[i].maximumProfit, 
+            "maximum drawdown"                    : self.portfolio[i].maximumDrawDown, 
+            "maximum consecutive loss"            : self.portfolio[i].maximumConsecutiveLoss,
+            "maximum consecutive gain"            : self.portfolio[i].maximumConsecutiveGain,
+            "maximum number of consecutive gains" : self.portfolio[i].maximumNumberOfConsecutiveGains
+            })
+        return port 
+    
+    def simulation_state(self) : 
+        """! \private
+        **Description :** 
+            
+            Function that returns a dictionnary object that contains all the simulation
+            runtime informations.
+        
+        **Parameters :** 
+            
+            None
+        
+        **Returns :** 
+            
+            a dictionnary
+        """
+        simu = dict() 
+        simu.update({
+            "symbols state" : [{x : self.portfolio[0].symbols[x].read("run")} for x in list(self.portfolio[0].symbols.keys())]
+            })
+        
+        return simu 
+        
+        
+    
+    def portfolio_state(self, i) : 
+        """! \private
+        **Description :** 
+            
+            Function that returns a dictionnary object that contains all the portfolio
+            runtime informations.
+        
+        **Parameters :** 
+            
+            - i [int] : Index of the current portfolio.
+        
+        **Returns :** 
+            
+            a dictionnary
+        """
+        port = dict()
+        port.update({
+            "balance"                                  : self.portfolio[i].balance, 
+            "available margin"                         : self.portfolio[i].availableMargin, 
+            "used margin"                              : self.portfolio[i].usedMargin, 
+            "equity"                                   : self.portfolio[i].equity, 
+            "margin level"                             : self.portfolio[i].marginLevel, 
+            "open positions"                           : [x.read() for x in self.portfolio[i].openPositions], 
+            #"pending orders"                           : [x.read() for x in self.portfolio[i].pendingOrders], # Note : We have to implement auto cancel to prevent from oversizing the pendingOrders list
+            "current value loss serie"                 : self.portfolio[i].currentValueLossSerie, 
+            "current value gain serie"                 : self.portfolio[i].currentValueGainSerie, 
+            "current drawdown"                         : self.portfolio[i].currentDrawDown, 
+            "current max. number of consecutive gains" : self.portfolio[i].currentMaximumNumberOfConsecutiveGains, 
+            "trade authorisation"                      : self.portfolio[i].tradeAuthorisation, 
+            })
+        
+        return port 
 
 
     def importStrategy(self) : 
@@ -196,6 +315,42 @@ class SIMULATION(ANALYSIS, WRITER) :
             sys.path.append(self.strategyPath[i]) 
             strategy = importlib.import_module(self.strategyFile[i])
             self.strategy.append(strategy.STRATEGY())
+
+        return 
+    
+    def set_backtest_log(self, 
+                         portfolioID = 0,
+                         path        = None, 
+                         replace     = False) : 
+        """! 
+        **Description :** 
+            
+            Function allowing to define the trading log properties. 
+        
+        **Parameters :** 
+            
+            - path [str]             : Path to the trading log file. If the file doesn't exist yet, the program will create it. 
+            - replace [bool] = False : If the trading log file already exists and replace = True, the program will overwrite the trading log file. 
+        
+        **Returns :** 
+            
+            None 
+        
+        Do be done : 
+
+        
+        """
+        
+        if path is not None : 
+            self.portfolio[portfolioID].trading_log_path = path 
+        
+        assert self.portfolio[portfolioID].trading_log_path is not None, "Error while reading the trading log file. Please provide a path." 
+        
+
+        if replace : 
+            self.portfolio[portfolioID].trading_log_first_write_mode = "w"
+        else : 
+            self.portfolio[portfolioID].trading_log_first_write_mode = "a"
 
         return 
 
@@ -224,7 +379,7 @@ class SIMULATION(ANALYSIS, WRITER) :
         print ("This functionnality is not working for instance and need to be coded")
         return
 
-    def run(self, mode = "sequential", idx = None) : 
+    def run(self, mode = "sequential", idx = None, latency = 0) : 
         """! 
         **Description :** 
         
@@ -251,6 +406,9 @@ class SIMULATION(ANALYSIS, WRITER) :
                 - Find a way to parallelise simulation inside this function]
         
         """ 
+        # We initiate the portfolios 
+        self.initiatePortfolios(mode = mode, idx = idx, latency = latency)
+        
         
         if mode == "sequential" : 
         
@@ -271,13 +429,17 @@ class SIMULATION(ANALYSIS, WRITER) :
     
                 # 3. We enter in the sub loop where strategies are executed 
                 #t3 = TIMER(name = "Strategy execution")
-                self.subLoop(mode = "sequential") 
+                
+                self.subLoop(mode = "sequential", index_ = i) 
                 #t3.stop()
     
                 self.simulationState(i, iMax, mode = "sequential") 
                 #print ("i = ",i,"/",iMax)
                 # We increment the simulation 
                 i += 1
+                
+                # We sleep 
+                time.sleep(latency)
         
         if mode == "linear" : 
             
@@ -303,13 +465,16 @@ class SIMULATION(ANALYSIS, WRITER) :
         
                     # 3. We enter in the sub loop where strategies are executed 
                     #t3 = TIMER(name = "Strategy execution")
-                    self.subLoop(mode = "linear", idx = j) 
+                    self.subLoop(mode = "linear", idx = j, index_ = i) 
                     #t3.stop()
         
                     self.simulationState(i, iMax, mode = "linear", idx = j) 
                     #print ("i = ",i,"/",iMax)
                     # We increment the simulation 
                     i += 1
+                    
+                    # We sleep 
+                    time.sleep(latency)
                     
         if mode == "unique" : 
             
@@ -334,13 +499,16 @@ class SIMULATION(ANALYSIS, WRITER) :
     
                 # 3. We enter in the sub loop where strategies are executed 
                 #t3 = TIMER(name = "Strategy execution")
-                self.subLoop(mode = "linear", idx = idx) 
+                self.subLoop(mode = "linear", idx = idx, index_ = i) 
                 #t3.stop()
     
                 self.simulationState(i, iMax, mode = "linear", idx = idx) 
                 #print ("i = ",i,"/",iMax)
                 # We increment the simulation 
                 i += 1
+                
+                # We sleep 
+                time.sleep(latency)
 
                 
         print ("Simulation terminated")
@@ -398,7 +566,17 @@ class SIMULATION(ANALYSIS, WRITER) :
     
 
     
-    
+    def initiatePortfolios(self, mode = None, idx = None, latency = None) : 
+        
+        if mode == "sequencial" or mode == "linear" : 
+            for i in range(len(self.portfolio)) : 
+                self.portfolio[i].initiate(simulation = self.simulation_header(), 
+                                           portfolio  = self.portfolio_header(i)) 
+        if mode == "unique" : 
+            self.portfolio[idx].initiate(simulation = self.simulation_header(), 
+                                         portfolio  = self.portfolio_header(idx)) 
+        return 
+        
     
     
     def updateEmulatedHistory(self, index, mode = None, idx = None) : 
@@ -465,7 +643,7 @@ class SIMULATION(ANALYSIS, WRITER) :
 
 
     
-    def executeStrategy(self, index = None) : 
+    def executeStrategy(self, index = None, index_ = None) : 
         """! \private
         **Description :** 
             
@@ -479,11 +657,17 @@ class SIMULATION(ANALYSIS, WRITER) :
             
             None 
         """
+        if (index_ % self.portfolio[index].log_step_every == 0) : 
+            self.portfolio[index].newTurn(index_,  
+                                          portfolio_state  = self.portfolio_state(index), 
+                                          simulation_state = self.simulation_state())
+        
+        
         self.strategy[index].run(self.portfolio[index])
         pass 
 
     
-    def subLoop(self, mode = None, idx = None) : 
+    def subLoop(self, mode = None, idx = None, index_ = None) : 
         """! \private
         **Description :** 
             
@@ -508,7 +692,7 @@ class SIMULATION(ANALYSIS, WRITER) :
                     for key in list(symbolPricesBid.keys()) : 
                         self.portfolio[j].symbols.get(key).setCurrentPrice(bidprice = symbolPricesBid.get(key)[i], 
                                                                            askprice = symbolPricesAsk.get(key)[i])
-                    self.executeStrategy(index = j) 
+                    self.executeStrategy(index = j, index_ = index_) 
                     self.portfolio[j].update()
                     
         if mode == "linear" : 
@@ -521,7 +705,7 @@ class SIMULATION(ANALYSIS, WRITER) :
                 for key in list(symbolPricesBid.keys()) : 
                     self.portfolio[idx].symbols.get(key).setCurrentPrice(bidprice = symbolPricesBid.get(key)[i], 
                                                                          askprice = symbolPricesAsk.get(key)[i])
-                self.executeStrategy(index = idx) 
+                self.executeStrategy(index = idx, index_ = index_) 
                 self.portfolio[idx].update()
 
 

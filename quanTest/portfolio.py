@@ -32,11 +32,12 @@ import datetime as dt
 import quanTest.financialTools as financialTools
 from quanTest.order import ORDER
 from quanTest.position import POSITION
+from quanTest.system import SYSTEM 
 
 from quanTest.models.slippage import SLIPPAGE
 
 
-class PORTFOLIO(SLIPPAGE) : 
+class PORTFOLIO(SLIPPAGE, SYSTEM) : 
     """!
     ===============================================================
     Q26 - QuanTester module - PORTFOLIO object. 
@@ -323,6 +324,40 @@ class PORTFOLIO(SLIPPAGE) :
         # simulation. 
         self.verbose                                = True 
         
+        
+        ## ### Backtest log file 
+        # **Type** : string \n 
+        # **Default value** : None \n 
+        # **Description** : 
+        # Path+name to a file dedicated to store all the actions done by 
+        # the backtester.
+        self.trading_log_path             = None 
+        
+        ## ### Backtest first file write mode 
+        # **Type** : bool \n 
+        # **Default value** : None \n 
+        # **Description** : 
+        # If True and log file already exists, the backtest 
+        # system will overwrite it. 
+        self.trading_log_first_write_mode = None 
+        
+        self.log_step_every = 100 
+        
+        
+        self.trading_log_actions = ["portfolio initialization",
+                                    "portfolio step",
+                                    "place order", 
+                                    "close position", 
+                                    "edit stoploss order", 
+                                    "edit takeprofit order", 
+                                    "cancel order", 
+                                    "get active positions", 
+                                    "get historical data", 
+                                    "get last price", 
+                                    "portfolio error", 
+                                    "strategy message"]
+        
+        
         # Models 
         ##! \private 
         self.slippageMdl                            = None 
@@ -350,6 +385,7 @@ class PORTFOLIO(SLIPPAGE) :
         """ 
         self.symbols.update({symbol.symbolName : symbol})
 
+    @SYSTEM.placeOrder
     def placeOrder(self, 
                    symbolName,
                    action     = "long",      # "long" or "short"
@@ -410,7 +446,7 @@ class PORTFOLIO(SLIPPAGE) :
         symbol = self.symbols.get(symbolName)
 
         #print(symbol.__dict__)
-
+        
         if symbol is not None and self.tradeAuthorisation : 
 
             orderList = self.createOrder(symbolName = symbolName, 
@@ -432,6 +468,7 @@ class PORTFOLIO(SLIPPAGE) :
             #print ("Order not placed")
             return [False, False, False]
     
+    @SYSTEM.editSLOrder
     def editSLOrder(self, 
                     symbolName, 
                     order, 
@@ -468,6 +505,7 @@ class PORTFOLIO(SLIPPAGE) :
                 if pendingOrderIndex is not None : 
                     self.pendingOrders[pendingOrderIndex].lmtPrice = stoploss 
 
+    @SYSTEM.editTPOrder
     def editTPOrder(self, 
                     symbolName, 
                     order, 
@@ -504,6 +542,7 @@ class PORTFOLIO(SLIPPAGE) :
                 if pendingOrderIndex is not None : 
                     self.pendingOrders[pendingOrderIndex].lmtPrice = takeprofit 
     
+    @SYSTEM.cancelOrder
     def cancelOrder(self, 
                     symbolName, 
                     order) : 
@@ -567,7 +606,7 @@ class PORTFOLIO(SLIPPAGE) :
 
         
                                          
-    
+    @SYSTEM.closePosition
     def closePosition(self,
                       symbolName, 
                       order) : 
@@ -602,7 +641,8 @@ class PORTFOLIO(SLIPPAGE) :
                     openPositionIndex = i 
             
             if openPositionIndex is None : 
-                print ("Error when retrieving the position")
+                self.error("Error when retrieving the position")
+                return False
             else : 
                 self.updatePosition(symbol, self.openPositions[openPositionIndex])
                 self.updatePortfolio()
@@ -618,10 +658,13 @@ class PORTFOLIO(SLIPPAGE) :
                 orderS.volume    = position.volume 
 
                 # We execute the order 
-                self.executeOrder(symbol, 
-                                  orderS, 
-                                  type = "close") 
+                return self.executeOrder(symbol, 
+                                         orderS, 
+                                         type = "close") 
+        else : 
+            return False 
     
+    @SYSTEM.getActivePositions
     def getActivePositions(self, 
                            symbolName) : 
         """! 
@@ -669,37 +712,46 @@ class PORTFOLIO(SLIPPAGE) :
         executeOrder = True 
         # A. We check if we have the global trading authorisation 
         if not self.tradeAuthorisation : 
-            if self.verbose : print ("Order cannot be executed. Trading un-authorised")
+            self.error("Order cannot be executed. Trading un-authorised")
             executeOrder = False 
         # B. We check if the order action is authorised by the portfolio 
         if not order.action in self.positions : 
-            if self.verbose : print ("Order action ",order.action," is not allowed by the portfolio parameters")
+            self.error("Order action "+order.action+" is not allowed by the portfolio parameters")
             executeOrder = False 
 
         # 1. We check if we have the request margin 
         if order.requestMargin > self.availableMargin : 
-            if self.verbose : print ("Order cannot be executed. The request margin is higher than the available margin")
+            self.error("Order cannot be executed. The request margin is higher than the available margin")
             executeOrder = False 
         if self.marginLevel < symbol.marginPercentage : 
-            if self.verbose : print ("Order cannot be executed. Available margin lower than the limit margin")
+            self.error("Order cannot be executed. Available margin lower than the limit margin", 
+                       kwargs = {"SYMBOL MARGIN %": symbol.marginPercentage, 
+                                 "MARGIN LEVEL"   : self.marginLevel, 
+                                 "MARGIN CALL TREESHOLD" : self.marginCallTreeshold, 
+                                 "AVAILABLE MARGIN" : self.availableMargin, 
+                                 "USED MARGIN": self.usedMargin})
             executeOrder = False 
         # 2. We check if the volume responds to the constraints 
         if order.volume > symbol.maximalVolume or order.volume < symbol.minimalVolume : 
-            if self.verbose : print ("Order cannot be executed. The volume amount is not right.") 
+            self.error("Order cannot be executed. The volume amount is not right.", 
+                       kwargs = {"ORDER NAME"      : order.symbolName, 
+                                 "ORDER VOLUME"    : order.volume, 
+                                 "SYMBOL MiN VOLUME": symbol.minimalVolume, 
+                                 "SYMBOL MaX VOLUME": symbol.maximalVolume})
             executeOrder = False 
         # 3. We check if the volume step responds to the constrains 
-        if order.volume / symbol.volumeStep != int(order.volume / symbol.volumeStep) : 
-            if self.verbose : print ("Order cannot be executed. The volume step is not right")
+        if round(order.volume / symbol.volumeStep, 8) != round(order.volume / symbol.volumeStep, 0) :
+            self.error("Order cannot be executed. The volume step is not right")
             executeOrder = False
         # 4. We check if the market is open or not 
         if symbol.marketState == "closed" : 
-            if self.verbose : print ("Order cannot be executed. The market is closed")
+            self.error("Order cannot be executed. The market is closed")
             executeOrder = False 
         if symbol.marketState == "sell only" and order.action == "long" : 
-            if self.verbose : print ("Order cannot be executed. Only sell orders are allowed")
+            self.error("Order cannot be executed. Only sell orders are allowed")
             executeOrder = False 
         if symbol.marketState == "buy only" and order.action == "short" : 
-            if self.verbose : print ("Order cannot be executed. Only buy orders are allowed")
+            self.error("Order cannot be executed. Only buy orders are allowed")
             executeOrder = False 
         
         return executeOrder 
@@ -724,24 +776,37 @@ class PORTFOLIO(SLIPPAGE) :
 
         # 1. The available margin is lower than the margin call treeshold 
         if self.marginLevel < self.marginCallTreeshold : 
+            self.error("The available margin is lower than the margin call treeshold", 
+                       kwargs = {"MARGIN LEVEL"          : self.marginLevel, 
+                                 "MARGIN CALL TREESHOLD" : self.marginCallTreeshold, 
+                                 "AVAILABLE MARGIN"      : self.availableMargin, 
+                                 "USED MARGIN"           : self.usedMargin})
             locAuthorisation = False   
         # 2. If the balance is lower than the minimum allowed 
         if self.balance < self.minimumBalance : 
+            self.error("The balance is lower than the minimum allowed", 
+                       kwargs = {"BALANCE"              : self.balance, 
+                                 "MINIMUM BALANCE"      : self.minimumBalance})
             locAuthorisation = False 
         # 3. If the profit made is higher than the maximum profit 
         if self.getProfit(option = "balance") > self.maximumProfit : 
+            self.error("The profit made is higher than the maximum profit")
             locAuthorisation = False 
         # 4. If the drawDown is higher than the maximum drawdown 
         if self.currentDrawDown >= self.maximumDrawDown : 
+            self.error("The drawdown is higher than the maximum drawdown")
             locAuthorisation = False 
         # 5. If the consecutive losses amount is higher than the maximum consecutive losses 
         if self.currentValueLossSerie >= self.maximumConsecutiveLoss : 
+            self.error("The consecutive losses amount is higher than the maximum consecutive losses")
             locAuthorisation = False 
         # 6. If the consecutive gains amount is higher than the maximum consecutive gains 
         if self.currentValueGainSerie >= self.maximumConsecutiveGain : 
+            self.error("The consecutive gains amount is higher than the maximum consecutive gains")
             locAuthorisation = False 
         # 7. If the consecutive gains number is higher than the maximum number of consecutive gains 
         if self.currentMaximumNumberOfConsecutiveGains >= self.maximumNumberOfConsecutiveGains : 
+            self.error("The consecutive gains number is higher than the maximum number of consecutive gains")
             locAuthorisation = False 
 
 
@@ -926,12 +991,12 @@ class PORTFOLIO(SLIPPAGE) :
             leverage     = self.leverage
 
             requestMargin = financialTools.requestMargin(type, 
-                                                        order.volume, 
-                                                        contractSize, 
-                                                        openPrice, 
-                                                        tickPrice, 
-                                                        tickSize, 
-                                                        leverage) 
+                                                         order.volume, 
+                                                         contractSize, 
+                                                         openPrice, 
+                                                         tickPrice, 
+                                                         tickSize, 
+                                                         leverage) 
             
             #print ("request margin = ",requestMargin)
             
@@ -948,12 +1013,17 @@ class PORTFOLIO(SLIPPAGE) :
             #                                            volume)
             commission = 0. 
 
-            if (requestMargin + commission > self.availableMargin) : 
+            if (requestMargin + commission > self.availableMargin) :
+                self.error("Cannot execute order : Request Margin + Commision > Available Margin", 
+                           kwargs = {"REQUEST MARGIN"     : requestMargin, 
+                                     "COMMISSION"         : commission, 
+                                     "AVAILABLE MARGIN"   : self.availableMargin})
                 return
         
             # Fifth, we operate the transaction 
             self.balance         -= requestMargin + commission
             self.usedMargin      += requestMargin 
+            if self.usedMargin < 0. : self.usedMargin       = 0.
             self.availableMargin -= requestMargin + commission
             self.marginLevel      = np.divide(self.availableMargin, self.usedMargin)*100.
 
@@ -1012,7 +1082,7 @@ class PORTFOLIO(SLIPPAGE) :
                         openPositionIndex = i 
                 
                 if openPositionIndex is None : 
-                    print ("Error when retrieving the position associated to the closing order")
+                    self.error("Error when retrieving the position associated to the closing order")
                 else : 
 
                     order.executed = True
@@ -1032,6 +1102,7 @@ class PORTFOLIO(SLIPPAGE) :
 
                     self.balance         += absoluteProfit_ + requestMargin + commission
                     self.usedMargin      -= requestMargin #+ absoluteProfit_ 
+                    if self.usedMargin < 0.   : self.usedMargin = 0. 
                     self.availableMargin += requestMargin #+ absoluteProfit_ 
                     self.marginLevel      = np.divide(self.availableMargin, self.usedMargin)*100.
 
@@ -1070,7 +1141,7 @@ class PORTFOLIO(SLIPPAGE) :
                         self.currentMaximumNumberOfConsecutiveGains += 1
 
             else : 
-                print ("Error. The order has no parent order")
+                self.error("Error. The order has no parent order")
 
                 
  
@@ -1267,6 +1338,7 @@ class PORTFOLIO(SLIPPAGE) :
 
         self.historicalDataPrice = historicalData
 
+    @SYSTEM.getHistoricalData
     def getHistoricalData(self, 
                           symbolName, 
                           dateIni, 
@@ -1377,7 +1449,7 @@ class PORTFOLIO(SLIPPAGE) :
             return dictDf 
 
 
-
+    @SYSTEM.getLastPrice 
     def getLastPrice(self, symbolName) : 
         """! 
         **Description :** 
@@ -1433,3 +1505,42 @@ class PORTFOLIO(SLIPPAGE) :
             "market state" : self.symbols.get(symbolName).marketState   
         }
         return price 
+    
+    ###################################################################
+    # Portfolio system functions 
+    ###################################################################
+    @SYSTEM.message 
+    def message(self, messageStr, category = "Strategy Message", kwargs = dict()) : 
+        
+        if self.verbose : 
+            print (category)
+            print (messageStr) 
+            for key in list(kwargs.keys()) : 
+                print (key+": "+str(kwargs[key])) 
+                
+        return 
+    
+    @SYSTEM.error
+    def error(self, errorStr, category = "Portfolio Error.", kwargs = dict()) : 
+        
+        if self.verbose : 
+            print (category)
+            print (errorStr) 
+            for key in list(kwargs.keys()) : 
+                print (key+": "+str(kwargs[key])) 
+        
+        return 
+    
+    @SYSTEM.step
+    def newTurn(self, index_, portfolio_state = None, simulation_state = None) : 
+        
+        return 
+    
+    @SYSTEM.init
+    def initiate(self, simulation = None, portfolio = None) : 
+        
+        return self.trading_log_first_write_mode
+        
+        
+    
+    

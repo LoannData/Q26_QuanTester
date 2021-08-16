@@ -129,5 +129,27 @@ class POSITION :
         # **Description** : \n 
         # True if the POSITION is closed. 
         self.closed             = False      # Is the position closed 
+        
+        
+    def read(self) : 
+        
+        pos_ = dict() 
+        pos_.update({
+            "order ID"                 : self.orderID, 
+            "symbol"                   : self.symbol, 
+            "volume"                   : self.volume, 
+            "action"                   : self.action, 
+            "execution price"          : self.executionPrice, 
+            "execution date"           : str(self.executionDate), 
+            "broker loan"              : self.brokerLoan, 
+            "request margin"           : self.requestMargin, 
+            "possible close price"     : self.possibleClosePrice, 
+            "possible close date"      : str(self.possibleCloseDate), 
+            "profit"                   : self.profit, 
+            "comment"                  : self.comment, 
+            "closed"                   : self.closed
+            })
+        
+        return pos_
 
         
