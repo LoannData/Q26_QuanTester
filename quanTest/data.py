@@ -1061,22 +1061,49 @@ class PRICE_TABLE :
             None 
         """
 
-        # 1. We cut the useless edges of the data 
-        lateGeneralBeginning = self.priceList[0].date[0]
-        earlyGeneralEnd      = self.priceList[0].date[-1] 
+        # 1. We retrieve the latest start time and the earliest stop time 
+        # from the non-sampled dataset 
+        j = 0 
+        while self.priceList[j].sampled : 
+            j += 1 
+        
+        lateGeneralBeginning = self.priceList[j].date[0]
+        earlyGeneralEnd      = self.priceList[j].date[-1] 
+        for i in range(j+1, len(self.priceList)) : 
+            if not self.priceList[i].sampled : 
+                if lateGeneralBeginning < self.priceList[i].date[0] : 
+                    lateGeneralBeginning = self.priceList[i].date[0]
+                if earlyGeneralEnd > self.priceList[i].date[-1] : 
+                    earlyGeneralEnd = self.priceList[i].date[-1]
+        
+        # 2. For every non-sampled data, we first fill the missing data 
+        # then we cut the borders 
+        for i in range(len(self.priceList)) : 
+            if not self.priceList[i].sampled : 
+                self.priceList[i].fillMissingData(model = "constant")
+                j_begin = 0 
+                while lateGeneralBeginning > self.priceList[i].date[j_begin] : 
+                    j_begin += 1 
+                
+                j_end = len(self.priceList[i].date) -1
+                while earlyGeneralEnd < self.priceList[i].date[j_end] : 
+                    j_end -= 1 
+                
+                self.priceList[i].askOpen   = self.priceList[i].askOpen[j_begin:j_end]
+                self.priceList[i].askHigh   = self.priceList[i].askHigh[j_begin:j_end]
+                self.priceList[i].askLow    = self.priceList[i].askLow[j_begin:j_end] 
+                self.priceList[i].askClose  = self.priceList[i].askClose[j_begin:j_end]
+                self.priceList[i].bidOpen   = self.priceList[i].bidOpen[j_begin:j_end] 
+                self.priceList[i].bidHigh   = self.priceList[i].bidHigh[j_begin:j_end] 
+                self.priceList[i].bidLow    = self.priceList[i].bidLow[j_begin:j_end]
+                self.priceList[i].bidClose  = self.priceList[i].bidClose[j_begin:j_end]
+                self.priceList[i].volume    = self.priceList[i].volume[j_begin:j_end]
+                self.priceList[i].date      = self.priceList[i].date[j_begin:j_end]
+                
 
-        for i in range(1, len(self.priceList)) : 
-
-            if lateGeneralBeginning > self.priceList[i].date[0] : 
-                lateGeneralBeginning = self.priceList[i].date[0]
-            
-            if earlyGeneralEnd > self.priceList[i].date[-1] : 
-                earlyGeneralEnd = self.priceList[i].date[-1]
-
-        # 2. We fill the missing data 
+        # 3. For each data price, we set the market state and the system of index 
         for i in range(len(self.priceList)) : 
 
-            self.priceList[i].fillMissingData(model = "constant")
             self.priceList[i].setMarketState() 
             self.priceList[i].setBaseIndex()
         
