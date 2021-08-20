@@ -1060,6 +1060,11 @@ class PRICE_TABLE :
             
             None 
         """
+        # 0. For every non-sampled data, we fill the missing data in order to 
+        # avoid holes of data which could break the data time synchronisation. 
+        for i in range(len(self.priceList)) : 
+            if not self.priceList[i].sampled : 
+                self.priceList[i].fillMissingData(model = "constant")
 
         # 1. We retrieve the latest start time and the earliest stop time 
         # from the non-sampled dataset 
@@ -1080,7 +1085,7 @@ class PRICE_TABLE :
         # then we cut the borders 
         for i in range(len(self.priceList)) : 
             if not self.priceList[i].sampled : 
-                self.priceList[i].fillMissingData(model = "constant")
+                #self.priceList[i].fillMissingData(model = "constant")
                 j_begin = 0 
                 while lateGeneralBeginning > self.priceList[i].date[j_begin] : 
                     j_begin += 1 
